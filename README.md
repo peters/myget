@@ -1,8 +1,8 @@
 # MyGet
 
 A complete build suite for creating nuget packages for miscellaneous CI build environments (think MyGet).
-As a an extra bonus these scripts will work without a CI serverlso. In short that means that you can use
-these scripts locally.
+As a an extra bonus these scripts will also work without a CI server. In short that means that you can use
+these scripts on your local computer.
 
 # Awesome?
 
