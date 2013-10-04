@@ -9,7 +9,7 @@ param(
 $rootFolder = Split-Path -parent $script:MyInvocation.MyCommand.Definition
 . $rootFolder\myget.include.ps1
 
-if(MyGet-BuildRunner -eq "myget") {
+if(MyGet-BuildRunner -neq "myget") {
     MyGet-Die "Try running .\build.all.samples.ps1 DUDE!"
 }
 
