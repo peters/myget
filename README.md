@@ -10,6 +10,8 @@ Check out the [tutorials]() over at MyGet.
 
 # Packages.conf (Available substitutions)
 
+** = **Provided by MyGet**
+
 <table border="0" cellpadding="3" cellspacing="0" width="90%">
     <tr>
         <th align="left" width="190">
@@ -19,33 +21,37 @@ Check out the [tutorials]() over at MyGet.
             Description
         </th>
     </tr>
-	  <tr>
-        <td>$bin$</td>
+    <tr>
+        <td>$bin$ **</td>
         <td>
             bin\$version$\$platform$\$configuration$ -> bin\(x86|x64|AnyCpu)\1.0.0\(v2.0|v3.5|v4.0|v4.5|v4.5.1)
         </td>
     </tr>
-	  <tr>
-        <td>$platform$</td>
+    <tr>
+        <td>$platform$ **</td>
         <td>x86|x64|AnyCpu</td>
     </tr>
-	  <tr>
-        <td>$configuration$</td>
+    <tr>
+        <td>$nuspecfolder$ **</td>
+        <td>Folder where nuspec resides in a project</td>
+    </tr>
+    <tr>
+        <td>$configuration$ **</td>
         <td>Debug|Release (You decide this value)</td>
     </tr>
-	  <tr>
+    <tr>
         <td>$id$</td>
         <td>The Assembly name</td>
     </tr>
-	  <tr>
+    <tr>
         <td>$version$</td>
         <td>The assembly version as specified in the assembly’s AssemblyVersionAttribute. If the assembly’s AssemblyInformationalVersionAttribute is specified, that one is used instead.</td>
     </tr>
-	  <tr>
+    <tr>
         <td>$author$</td>
         <td>The company as specified in the AssemblyCompanyAttribute.</td>
     </tr>
-	  <tr>
+    <tr>
         <td>$description$</td>
         <td>The company as specified in the AssemblyCompanyAttribute.</td>
     </tr>
@@ -63,7 +69,7 @@ Check out the [tutorials]() over at MyGet.
             Description
         </th>
     </tr>
-	  <tr>
+    <tr>
         <td>-packageVersion</td>
         <td>
             Package version to build. If building using a CI server, $env:PackageVersion is used instead.
