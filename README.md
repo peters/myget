@@ -1,12 +1,14 @@
 # MyGet
 
-A collection of various build scripts for effectively creating nuget packages. 
+A complete build suite for creating nuget packages for miscellaneous CI build environments (think MyGet).
+As a an extra bonus these scripts will work without a CI serverlso. In short that means that you can use
+these scripts locally.
 
 # Awesome?
 
 Check out the [tutorials]() over at MyGet.
 
-# Testing miscellaneous build configurations
+# Standalone (wihout MyGet)
 
 Script parameters
 ---
@@ -68,14 +70,8 @@ AnyCpu
 
 Build all projects in solution.
 
-```
+```ps
 .\build.sample.solution.anycpu.ps1 -packageVersion 1.0.0
-```
-
-Build a single project in solution.
-
-```
-.\build.sample.solution.anycpu.ps1 -packageVersion 1.0.0 -projects @('sample.solution.anycpu.csproj') 
 ```
 
 X86/X64
@@ -83,14 +79,8 @@ X86/X64
 
 Build all projects in solution for both x86/x64.
 
-```
+```ps
 .\build.sample.solution.x86.x64.ps1 -packageVersion 1.0.0 -platforms @('x86','x64')
-```
-
-Build a single project in solution for both x86/x64.
-
-```
-.\build.sample.solution.x86.x64.ps1 -packageVersion 1.0.0 -platforms @('x86','x64') -projects @('sample.solution.x86.x64.csproj') 
 ```
 
 X86
@@ -98,14 +88,14 @@ X86
 
 Build all projects in solution for both x86 only.
 
-```
+```ps
 .\build.sample.solution.x86.x64.ps1 -packageVersion 1.0.0 -platforms @('x86')
 ```
 
 Build a single project in solution for x86 only.
 
-```
-.\build.sample.solution.x86.x64.ps1 -packageVersion 1.0.0 -platforms @('x86') -projects @('sample.solution.x86.x64.csproj') 
+```ps
+.\build.sample.solution.x86.x64.ps1 -packageVersion 1.0.0 -platforms @('x86')
 ```
 
 X64
@@ -113,14 +103,28 @@ X64
 
 Build all projects in solution for both x64 only.
 
-```
+```ps
 .\build.sample.solution.x86.x64.ps1 -packageVersion 1.0.0 -platforms @('x64')
 ```
 
 Build all projects in solution for both x64 only.
 
+```ps
+.\build.sample.solution.x86.x64.ps1 -packageVersion 1.0.0 -platforms @('x64')
 ```
-.\build.sample.solution.x86.x64.ps1 -packageVersion 1.0.0 -platforms @('x64') -projects @('sample.solution.x86.x64.csproj') 
+
+Build.ps1 (Solution)
+---
+
+```ps
+
+```
+
+Build.ps1 (Single project)
+---
+```ps
+
+
 ```
 
 MyGet build properties (packages.conf)
