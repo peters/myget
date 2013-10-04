@@ -8,10 +8,52 @@ these scripts locally.
 
 Check out the [tutorials]() over at MyGet.
 
-# Standalone (wihout MyGet)
+# MyGet build properties (packages.conf)
 
-Script parameters
----
+<table border="0" cellpadding="3" cellspacing="0" width="90%">
+    <tr>
+        <th align="left" width="190">
+            Variable
+        </th>
+        <th align="left">
+            Description
+        </th>
+    </tr>
+	  <tr>
+        <td>$bin$</td>
+        <td>
+            bin\$version$\$platform$\$configuration$ -> bin\(x86|x64|AnyCpu)\1.0.0\(v2.0|v3.5|v4.0|v4.5|v4.5.1)
+        </td>
+    </tr>
+	  <tr>
+        <td>$platform$</td>
+        <td>x86|x64|AnyCpu</td>
+    </tr>
+	  <tr>
+        <td>$configuration$</td>
+        <td>Debug|Release (You decide this value)</td>
+    </tr>
+	  <tr>
+        <td>$id$</td>
+        <td>The Assembly name</td>
+    </tr>
+	  <tr>
+        <td>$version$</td>
+        <td>The assembly version as specified in the assembly’s AssemblyVersionAttribute. If the assembly’s AssemblyInformationalVersionAttribute is specified, that one is used instead.</td>
+    </tr>
+	  <tr>
+        <td>$author$</td>
+        <td>The company as specified in the AssemblyCompanyAttribute.</td>
+    </tr>
+	  <tr>
+        <td>$description$</td>
+        <td>The company as specified in the AssemblyCompanyAttribute.</td>
+    </tr>
+</tr>
+</table>
+
+# Script parameters
+
 <table border="0" cellpadding="3" cellspacing="0" width="90%">
     <tr>
         <th align="left" width="190">
@@ -65,8 +107,7 @@ Script parameters
     </tr>
 </table>
 
-AnyCpu
----
+# AnyCpu
 
 Build all projects in solution.
 
@@ -74,8 +115,7 @@ Build all projects in solution.
 .\build.sample.solution.anycpu.ps1 -packageVersion 1.0.0
 ```
 
-X86/X64
----
+# X86/X64
 
 Build all projects in solution for both x86/x64.
 
@@ -83,38 +123,23 @@ Build all projects in solution for both x86/x64.
 .\build.sample.solution.x86.x64.ps1 -packageVersion 1.0.0 -platforms @('x86','x64')
 ```
 
-X86
----
+# X86
 
-Build all projects in solution for both x86 only.
-
-```ps
-.\build.sample.solution.x86.x64.ps1 -packageVersion 1.0.0 -platforms @('x86')
-```
-
-Build a single project in solution for x86 only.
+Build all projects in solution for x86 only.
 
 ```ps
 .\build.sample.solution.x86.x64.ps1 -packageVersion 1.0.0 -platforms @('x86')
 ```
 
-X64
----
+# X64
 
-Build all projects in solution for both x64 only.
-
-```ps
-.\build.sample.solution.x86.x64.ps1 -packageVersion 1.0.0 -platforms @('x64')
-```
-
-Build all projects in solution for both x64 only.
+Build all projects in solution for x64 only.
 
 ```ps
 .\build.sample.solution.x86.x64.ps1 -packageVersion 1.0.0 -platforms @('x64')
 ```
 
-Build.ps1 (All projects in solution)
----
+# Build.ps1 (All projects in solution)
 
 ```ps
 param(
@@ -167,8 +192,7 @@ $platforms | ForEach-Object {
 MyGet-Success
 ```
 
-Build.ps1 (Individual projects in a solution)
-----
+# Build.ps1 (Individual projects in a solution)
 
 ```ps
 param(
@@ -226,9 +250,7 @@ $platforms | ForEach-Object {
 MyGet-Success
 ```
 
-Build.ps1 (Individual projects without a solution)
----
-
+# Build.ps1 (Individual projects without a solution)
 
 ```ps
 param(
@@ -303,50 +325,6 @@ $platforms | ForEach-Object {
 
 MyGet-Build-Success
 ```
-
-MyGet build properties (packages.conf)
-============================
-<table border="0" cellpadding="3" cellspacing="0" width="90%">
-    <tr>
-        <th align="left" width="190">
-            Variable
-        </th>
-        <th align="left">
-            Description
-        </th>
-    </tr>
-	  <tr>
-        <td>$bin$</td>
-        <td>
-            bin\$version$\$platform$\$configuration$ -> bin\(x86|x64|AnyCpu)\1.0.0\(v2.0|v3.5|v4.0|v4.5|v4.5.1)
-        </td>
-    </tr>
-	  <tr>
-        <td>$platform$</td>
-        <td>x86|x64|AnyCpu</td>
-    </tr>
-	  <tr>
-        <td>$configuration$</td>
-        <td>Debug|Release (You decide this value)</td>
-    </tr>
-	  <tr>
-        <td>$id$</td>
-        <td>The Assembly name</td>
-    </tr>
-	  <tr>
-        <td>$version$</td>
-        <td>The assembly version as specified in the assembly’s AssemblyVersionAttribute. If the assembly’s AssemblyInformationalVersionAttribute is specified, that one is used instead.</td>
-    </tr>
-	  <tr>
-        <td>$author$</td>
-        <td>The company as specified in the AssemblyCompanyAttribute.</td>
-    </tr>
-	  <tr>
-        <td>$description$</td>
-        <td>The company as specified in the AssemblyCompanyAttribute.</td>
-    </tr>
-</tr>
-</table>
 
 # License
 
