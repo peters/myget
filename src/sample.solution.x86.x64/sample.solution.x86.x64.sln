@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sample.solution.x86.x64", "sample.solution.x86.x64\sample.solution.x86.x64.csproj", "{2BF7657B-AB19-43C7-B794-805A10BBE77B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{72E7ABE3-4F37-4F06-9712-B3A53A3C16EB}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sample.solution.x86.x64.tests", "sample.solution.x86.x64.tests\sample.solution.x86.x64.tests.csproj", "{0ECAA57A-6B3C-4CAD-A1C8-D2C78B88EE9D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2BF7657B-AB19-43C7-B794-805A10BBE77B}.Debug|x64.ActiveCfg = Debug|x64
+		{2BF7657B-AB19-43C7-B794-805A10BBE77B}.Debug|x64.Build.0 = Debug|x64
+		{2BF7657B-AB19-43C7-B794-805A10BBE77B}.Debug|x86.ActiveCfg = Debug|x86
+		{2BF7657B-AB19-43C7-B794-805A10BBE77B}.Debug|x86.Build.0 = Debug|x86
+		{2BF7657B-AB19-43C7-B794-805A10BBE77B}.Release|x64.ActiveCfg = Release|x64
+		{2BF7657B-AB19-43C7-B794-805A10BBE77B}.Release|x64.Build.0 = Release|x64
+		{2BF7657B-AB19-43C7-B794-805A10BBE77B}.Release|x86.ActiveCfg = Release|x86
+		{2BF7657B-AB19-43C7-B794-805A10BBE77B}.Release|x86.Build.0 = Release|x86
+		{0ECAA57A-6B3C-4CAD-A1C8-D2C78B88EE9D}.Debug|x64.ActiveCfg = Debug|x64
+		{0ECAA57A-6B3C-4CAD-A1C8-D2C78B88EE9D}.Debug|x64.Build.0 = Debug|x64
+		{0ECAA57A-6B3C-4CAD-A1C8-D2C78B88EE9D}.Debug|x86.ActiveCfg = Debug|x64
+		{0ECAA57A-6B3C-4CAD-A1C8-D2C78B88EE9D}.Debug|x86.Build.0 = Debug|x64
+		{0ECAA57A-6B3C-4CAD-A1C8-D2C78B88EE9D}.Release|x64.ActiveCfg = Release|x64
+		{0ECAA57A-6B3C-4CAD-A1C8-D2C78B88EE9D}.Release|x64.Build.0 = Release|x64
+		{0ECAA57A-6B3C-4CAD-A1C8-D2C78B88EE9D}.Release|x86.ActiveCfg = Release|x86
+		{0ECAA57A-6B3C-4CAD-A1C8-D2C78B88EE9D}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
