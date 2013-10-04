@@ -1,18 +1,42 @@
 # MyGet
 
-A complete build suite for creating nuget packages for miscellaneous CI build environments (think MyGet).
-As a an extra bonus these scripts will also work without a CI server. In short that means that you can use
-these scripts on your local computer.
+A complete build suite for creating NuGet packages for miscellaneous CI build environments (think [MyGet](http://www.myget.org)). How does it work? Simply include the  ```myget.include.ps1``` script in your ```build.ps1``` on MyGet and use the provided functions.
 
-# Awesome?
+Note these scripts will also work without a CI server, for example on your local computer.
 
-Check out the [tutorials]() over at MyGet.
-
-# Getting started?
+# Getting started
 
 Checkout the build.*.ps1 files in this repository. 
 
-# Packages.conf (Available substitutions)
+# Available functions
+The ```myget.include.ps1``` script can be included by your ```build.ps1``` script to make use of the following functions:
+
+## Build agent communication
+* ```MyGet-Write-Diagnostic``` - writes a diagnostic message to the standard output
+* ```MyGet-Build-Success``` - report build success
+* ```MyGet-Die``` - report build failure
+
+## Utility functions
+* ```MyGet-Create-Folder``` - create a new folder
+* ```MyGet-Build-Clean``` - recursive clean a folder
+* ```MyGet-Grep``` -grep-like function
+
+* ```MyGet-BuildRunner``` - returns the current build runner (empty if not run within MyGet Build Services)
+* ```MyGet-Package-Version``` - returns the package version under build (empty if not run within MyGet Build Services)
+* ```MyGet-NunitExe-Path``` - path to the NUnit test runner
+* ```MyGet-XunitExe-Path``` - path to the XUnit test runner
+
+## Build steps
+* ```MyGet-Build-Bootstrap``` - starts a build (including NuGet package restore)
+* ```MyGet-Build-Solution``` - starts a build of a solution file
+* ```MyGet-Build-Project``` - starts a build of a project file
+* ```MyGet-Build-Nupkg``` - creates a NuGet package based on a specified .nuspec file. The .nuspec can contain additional replacement tokens (see further)
+
+## Test runners
+* ```MyGet-TestRunner-Nunit``` - invoke NUnit
+* ```MyGet-TestRunner-Xunit``` - invoke XUnit
+
+# NuSpec substitutions
 
 ** = **Provided by MyGet**
 
