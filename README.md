@@ -113,18 +113,139 @@ Build all projects in solution for both x64 only.
 .\build.sample.solution.x86.x64.ps1 -packageVersion 1.0.0 -platforms @('x64')
 ```
 
-Build.ps1 (Solution)
+Build.ps1 (Multiple projects)
 ---
 
 ```ps
+param(
+    [string[]]$projects = @(
+        "src\sample.solution.anycpu\sample.solution.anycpu\sample.solution.anycpu.csproj"
+        "src\sample.solution.anycpu\sample.solution.anycpu\sample.solution.anycpu.tests.csproj"
+    ),
+    [string[]]$platforms = @(
+        "AnyCpu"
+    ),
+    [string[]]$targetFrameworks = @(
+        "v2.0", 
+        "v3.5", 
+        "v4.0",
+        "v4.5", 
+        "v4.5.1"
+    ),
+    [string]$packageVersion = $null,
+    [string]$config = "release",
+    [string]$target = "rebuild",
+    [string]$verbosity = "minimal",
+    [bool]$clean = $true
+)
 
+# Initialization
+$rootFolder = Split-Path -parent $script:MyInvocation.MyCommand.Definition
+. $rootFolder\myget.include.ps1
+
+# Build folders
+$outputFolder = Join-Path $rootFolder "bin\sample.solution.anycpu"
+
+# Myget
+$packageVersion = MyGet-Package-Version $packageVersion
+$nugetExe = MyGet-NugetExe-Path
+
+# Build solution
+$platforms | ForEach-Object {
+    $platform = $_
+
+    MyGet-Build-Solution -sln $rootFolder\src\sample.solution.anycpu\sample.solution.anycpu.sln `
+        -rootFolder $rootFolder `
+        -outputFolder $outputFolder `
+        -platforms $platforms `
+        -projects $projects `
+        -targetFrameworks $targetFrameworks `
+        -verbosity $verbosity `
+        -clean $clean `
+        -config $config `
+        -target $target `
+        -version $currentVersion `
+        -excludeNupkgPattern .tests.csproj$ # Do not build nupkg for unit tests
+
+}
+
+MyGet-Success
 ```
 
-Build.ps1 (Single project)
+Build.ps1 (Specific project)
 ---
 ```ps
+param(
+    [string[]]$projects = @(
+        "src\sample.solution.anycpu\sample.solution.anycpu\sample.solution.anycpu.csproj"
+        "src\sample.solution.anycpu\sample.solution.anycpu\sample.solution.anycpu.tests.csproj"
+    ),
+    [string[]]$platforms = @(
+        "AnyCpu"
+    ),
+    [string[]]$targetFrameworks = @(
+        "v2.0", 
+        "v3.5", 
+        "v4.0",
+        "v4.5", 
+        "v4.5.1"
+    ),
+    [string]$packageVersion = $null,
+    [string]$config = "release",
+    [string]$target = "rebuild",
+    [string]$verbosity = "minimal",
+    [bool]$clean = $true
+)
 
+# Initialization
+$rootFolder = Split-Path -parent $script:MyInvocation.MyCommand.Definition
+. $rootFolder\myget.include.ps1
 
+# Build folders
+$outputFolder = Join-Path $rootFolder "bin\sample.solution.anycpu"
+
+# Myget
+$packageVersion = MyGet-Package-Version $packageVersion
+$nugetExe = MyGet-NugetExe-Path
+
+# Build for each platform
+$platforms | ForEach-Object {
+    $platform = $_
+
+    # Build each project
+    $projects | ForEach-Object {
+        $buildOutputFolder = Join-Path $outputFolder "$platform"
+        $project = $_
+
+        # Bootstrap
+        MyGet-Build-Clean $rootFolder
+        MyGet-Build-Bootstrap $rootFolder
+
+        # Build project
+        MyGet-Build-Project -rootFolder $rootFolder `
+            -outputFolder $buildOutputFolder `
+            -csproj $project `
+            -config $config `
+            -target $target `
+            -targetFrameworks $targetFrameworks `
+            -platform $platform
+
+        # Do not build nupkg for unit tests
+        if(-not ($project -match ".tests$")) {
+            
+            MyGet-Build-Nupkg -rootFolder $rootFolder `
+                -outputFolder $buildOutputFolder `
+                -csproj $project `
+                -config $config `
+                -version $packageVersion `
+                -platform $platform
+
+        }
+
+    }
+}
+
+MyGet-Build-Success
 ```
 
 MyGet build properties (packages.conf)
