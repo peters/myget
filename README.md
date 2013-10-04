@@ -189,7 +189,7 @@ $platforms | ForEach-Object {
 
 }
 
-MyGet-Success
+MyGet-Build-Success
 ```
 
 # Build.ps1 (Individual projects in a solution)
@@ -247,7 +247,7 @@ $platforms | ForEach-Object {
 
 }
 
-MyGet-Success
+MyGet-Build-Success
 ```
 
 # Build.ps1 (Individual projects without a solution)
