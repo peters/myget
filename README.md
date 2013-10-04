@@ -22,7 +22,7 @@ Check out the [tutorials]() over at MyGet.
         </th>
     </tr>
     <tr>
-        <td>$bin$ **</td>
+        <td>$outputfolder$ **</td>
         <td>
             bin\$version$\$platform$\$configuration$ -> bin\(x86|x64|AnyCpu)\1.0.0\(v2.0|v3.5|v4.0|v4.5|v4.5.1)
         </td>
