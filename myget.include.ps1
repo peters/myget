@@ -1,6 +1,4 @@
-# This file will be replaced by MyGet during CI build
-# Submit a PR upstream @ https://www.github/peters/myget
-########################################################
+# You can always find an updated version @ https://raw.github.com/peters/myget/master/myget.include.ps1
 
 # Miscellaneous
 
