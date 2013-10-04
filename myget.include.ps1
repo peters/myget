@@ -157,17 +157,22 @@ function MyGet-Build-Clean {
 
 function MyGet-Build-Bootstrap {
     param(
-        [string]$rootFolder = $(throw "-rootFolder is required.")
+        [string]$project = $(throw "-solutionFile is required.")
     )
 
     MyGet-Write-Diagnostic "Build: Bootstrap"
 
+    $solutionFolder = [System.IO.Path]::GetDirectoryName($project)
     $nugetExe = MyGet-NugetExe-Path
 
     . $nugetExe config -Set Verbosity=quiet
 
-    MyGet-Grep $rootFolder -recursive $true -pattern ".sln$" | ForEach-Object {
-        . $nugetExe restore $_.FullName -NonInteractive
+    if($project -match ".sln$") {
+        . $nugetExe restore $project -NonInteractive
+    }
+
+    MyGet-Grep $rootFolder -recursive $true -pattern ".packages.config$" | ForEach-Object {
+        . $nugetExe restore $_.FullName -NonInteractive -SolutionDirectory $solutionFolder
     }
 
 }
@@ -286,8 +291,10 @@ function MyGet-Build-Project {
     MyGet-Create-Folder $outputFolder
 
     if(-Not (Test-Path $projectPath)) {
-        MyGet-Die "Could not find csproj: $projectPath"
+        MyGet-Die "Could not find project: $projectPath"
     }
+
+    MyGet-Build-Bootstrap $projectPath
 
     $targetFrameworks | ForEach-Object {
         

@@ -41,11 +41,6 @@ $excludeNupkgProjects = @(
 
 # Bootstrap
 if($clean) { MyGet-Build-Clean $rootFolder }
-MyGet-Build-Bootstrap $rootFolder
-
-# Bootstrap
-if($clean) { MyGet-Build-Clean $rootFolder }
-MyGet-Build-Bootstrap $rootFolder
 
 # Build projects
 $platforms | ForEach-Object {
@@ -66,7 +61,8 @@ $platforms | ForEach-Object {
             -targetFrameworks $targetFrameworks `
             -platform $platform `
             -version $packageVersion `
-    
+        
+        # Build .nupkg
         if(-not ($excludeNupkgProjects -contains $project)) {
             MyGet-Build-Nupkg -rootFolder $rootFolder `
                 -outputFolder $nugetOutputPath `

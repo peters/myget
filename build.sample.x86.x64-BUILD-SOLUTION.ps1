@@ -33,7 +33,6 @@ $nugetExe = MyGet-NugetExe-Path
 
 # Bootstrap
 if($clean) { MyGet-Build-Clean $rootFolder }
-MyGet-Build-Bootstrap $rootFolder
 
 # Build solution
 $nuspec = Join-Path $solutionFolder "$solutionName\$solutionName.nuspec"
@@ -41,6 +40,7 @@ $nuspec = Join-Path $solutionFolder "$solutionName\$solutionName.nuspec"
 $platforms | ForEach-Object {
     $platform = $_
 
+    # Build solution 
     MyGet-Build-Solution -sln $solutionFolder\$solutionName.sln `
         -rootFolder $rootFolder `
         -outputFolder $outputFolder `

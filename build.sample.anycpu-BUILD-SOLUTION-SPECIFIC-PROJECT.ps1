@@ -32,9 +32,7 @@ $outputFolder = Join-Path $rootFolder "bin\$solutionName"
 $packageVersion = MyGet-Package-Version $packageVersion
 $nugetExe = MyGet-NugetExe-Path
 
-# Bootstrap
 if($clean) { MyGet-Build-Clean $rootFolder }
-MyGet-Build-Bootstrap $rootFolder
 
 # Build project
 $platforms | ForEach-Object {
@@ -55,7 +53,8 @@ $platforms | ForEach-Object {
             -targetFrameworks $targetFrameworks `
             -platform $platform `
             -version $packageVersion `
-
+    
+        # Build .nupkg
         MyGet-Build-Nupkg -rootFolder $rootFolder `
             -outputFolder $nugetOutputPath `
             -project $project `
