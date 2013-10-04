@@ -113,8 +113,62 @@ Build all projects in solution for both x64 only.
 .\build.sample.solution.x86.x64.ps1 -packageVersion 1.0.0 -platforms @('x64')
 ```
 
-Build.ps1 (Multiple projects)
+Build.ps1 (All projects in solution)
 ---
+
+```ps
+param(
+    [string[]]$platforms = @(
+        "AnyCpu"
+    ),
+    [string[]]$targetFrameworks = @(
+        "v2.0", 
+        "v3.5", 
+        "v4.0",
+        "v4.5", 
+        "v4.5.1"
+    ),
+    [string]$packageVersion = $null,
+    [string]$config = "release",
+    [string]$target = "rebuild",
+    [string]$verbosity = "minimal",
+    [bool]$clean = $true
+)
+
+# Initialization
+$rootFolder = Split-Path -parent $script:MyInvocation.MyCommand.Definition
+. $rootFolder\myget.include.ps1
+
+# Build folders
+$outputFolder = Join-Path $rootFolder "bin\sample.solution.anycpu"
+
+# Myget
+$packageVersion = MyGet-Package-Version $packageVersion
+$nugetExe = MyGet-NugetExe-Path
+
+# Build solution
+$platforms | ForEach-Object {
+    $platform = $_
+
+    MyGet-Build-Solution -sln $rootFolder\src\sample.solution.anycpu\sample.solution.anycpu.sln `
+        -rootFolder $rootFolder `
+        -outputFolder $outputFolder `
+        -platforms $platforms `
+        -targetFrameworks $targetFrameworks `
+        -verbosity $verbosity `
+        -clean $clean `
+        -config $config `
+        -target $target `
+        -version $currentVersion `
+        -excludeNupkgPattern .tests.csproj$ # Do not build nupkg for unit tests
+
+}
+
+MyGet-Success
+```
+
+Build.ps1 (Individual projects in a solution)
+----
 
 ```ps
 param(
@@ -156,9 +210,9 @@ $platforms | ForEach-Object {
 
     MyGet-Build-Solution -sln $rootFolder\src\sample.solution.anycpu\sample.solution.anycpu.sln `
         -rootFolder $rootFolder `
+        -projects $projects `
         -outputFolder $outputFolder `
         -platforms $platforms `
-        -projects $projects `
         -targetFrameworks $targetFrameworks `
         -verbosity $verbosity `
         -clean $clean `
@@ -172,8 +226,10 @@ $platforms | ForEach-Object {
 MyGet-Success
 ```
 
-Build.ps1 (Specific project)
+Build.ps1 (Individual projects without a solution)
 ---
+
+
 ```ps
 param(
     [string[]]$projects = @(
@@ -231,7 +287,7 @@ $platforms | ForEach-Object {
             -platform $platform
 
         # Do not build nupkg for unit tests
-        if(-not ($project -match ".tests$")) {
+        if(-not ($project -match ".tests.csproj$")) {
             
             MyGet-Build-Nupkg -rootFolder $rootFolder `
                 -outputFolder $buildOutputFolder `
