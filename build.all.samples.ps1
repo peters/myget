@@ -12,10 +12,10 @@ $configurations | ForEach-Object {
 
     # AnyCpu
     . $rootFolder\build.sample.anycpu-BUILD-SOLUTION.ps1 -packageVersion $packageVersion -config $config
-    #. $rootFolder\build.sample.anycpu-BUILD-SOLUTION-SPECIFIC-PROJECT.ps1 -packageVersion $packageVersion -config $config
-    #. $rootFolder\build.sample.anycpu-BUILD-SOLUTION-SPECIFIC-PROJECTS.ps1 -packageVersion $packageVersion -config $config
+    . $rootFolder\build.sample.anycpu-BUILD-SOLUTION-SPECIFIC-PROJECT.ps1 -packageVersion $packageVersion -config $config
+    . $rootFolder\build.sample.anycpu-BUILD-SOLUTION-SPECIFIC-PROJECTS.ps1 -packageVersion $packageVersion -config $config
 
     # x86/x64
-    #. $rootFolder\build.sample.x86.x64-BUILD-SOLUTION.ps1 -packageVersion $packageVersion -config $config
+    . $rootFolder\build.sample.x86.x64-BUILD-SOLUTION.ps1 -packageVersion $packageVersion -config $config
 
 }
