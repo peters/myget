@@ -8,7 +8,7 @@ these scripts locally.
 
 Check out the [tutorials]() over at MyGet.
 
-# MyGet build properties (packages.conf)
+# Packages.conf (Available substitutions)
 
 <table border="0" cellpadding="3" cellspacing="0" width="90%">
     <tr>
