@@ -38,13 +38,13 @@ if($clean) { MyGet-Build-Clean $rootFolder }
 $platforms | ForEach-Object {
     $platform = $_
 
-    # Build each project
+    # Projects to build
     $projects | ForEach-Object {
         
         $project = $_
         $buildOutputFolder = Join-Path $outputFolder "$packageVersion\$platform\$config"
 
-        # Projects to build
+        # Build project
         MyGet-Build-Project -rootFolder $rootFolder `
             -outputFolder $outputFolder `
             -project $project `
