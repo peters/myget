@@ -25,32 +25,31 @@ param(
 $rootFolder = Split-Path -parent $script:MyInvocation.MyCommand.Definition
 . $rootFolder\myget.include.ps1
 
-# Build folders
+# Myget
+$packageVersion = MyGet-Package-Version $packageVersion
+
+# Solution
 $solutionName = "sample.solution.anycpu"
 $solutionFolder = Join-Path $rootFolder "src\$solutionName"
 $outputFolder = Join-Path $rootFolder "bin\$solutionName"
-
-# Myget
-$packageVersion = MyGet-Package-Version $packageVersion
-$nugetExe = MyGet-NugetExe-Path
 
 # Exclude projects
 $excludeNupkgProjects = @(
     $projects[1]
 )
 
-# Bootstrap
+# Clean
 if($clean) { MyGet-Build-Clean $rootFolder }
 
-# Build projects
+# Platforms to build for
 $platforms | ForEach-Object {
     $platform = $_
 
-    # Build each project
+    # Projects to build
     $projects | ForEach-Object {
        
         $project = $_
-        $nugetOutputPath = Join-Path $outputFolder "$packageVersion\$platform\$config"
+        $buildOutputPath = Join-Path $outputFolder "$packageVersion\$platform\$config"
 
         # Build project
         MyGet-Build-Project -rootFolder $rootFolder `
@@ -65,7 +64,7 @@ $platforms | ForEach-Object {
         # Build .nupkg
         if(-not ($excludeNupkgProjects -contains $project)) {
             MyGet-Build-Nupkg -rootFolder $rootFolder `
-                -outputFolder $nugetOutputPath `
+                -outputFolder $buildOutputPath `
                 -project $project `
                 -config $config `
                 -version $packageVersion `
@@ -74,4 +73,5 @@ $platforms | ForEach-Object {
 
     }
 }
+
 MyGet-Build-Success
