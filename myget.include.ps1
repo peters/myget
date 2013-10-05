@@ -241,7 +241,7 @@ function MyGet-Build-Nupkg {
             MyGet-Create-Folder $mygetBuildFolder
 
             MyGet-Grep $outputFolder -recursive $false -pattern ".nupkg$" | ForEach-Object {
-                $filename = $_
+                $filename = $_.Name
                 $fullpath = $_.FullPath
 		
 		cp $fullpath $mygetBuildFolder\$filename
