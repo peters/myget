@@ -22,25 +22,23 @@ param(
 $rootFolder = Split-Path -parent $script:MyInvocation.MyCommand.Definition
 . $rootFolder\myget.include.ps1
 
-# Build folders
+# Myget
+$packageVersion = MyGet-Package-Version $packageVersion
+
+# Clean
+if($clean) { MyGet-Build-Clean $rootFolder }
+
+# Solution
 $solutionName = "sample.solution.x86.x64"
 $solutionFolder = "$rootFolder\src\$solutionName"
 $outputFolder = Join-Path $rootFolder "bin\$solutionName"
-
-# Myget
-$packageVersion = MyGet-Package-Version $packageVersion
-$nugetExe = MyGet-NugetExe-Path
-
-# Bootstrap
-if($clean) { MyGet-Build-Clean $rootFolder }
-
-# Build solution
 $nuspec = Join-Path $solutionFolder "$solutionName\$solutionName.nuspec"
 
+# Platforms to build for
 $platforms | ForEach-Object {
     $platform = $_
 
-    # Build solution 
+    # Build solution for current platform
     MyGet-Build-Solution -sln $solutionFolder\$solutionName.sln `
         -rootFolder $rootFolder `
         -outputFolder $outputFolder `
