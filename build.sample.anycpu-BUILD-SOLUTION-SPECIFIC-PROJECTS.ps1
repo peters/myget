@@ -33,7 +33,7 @@ $solutionName = "sample.solution.anycpu"
 $solutionFolder = Join-Path $rootFolder "src\$solutionName"
 $outputFolder = Join-Path $rootFolder "bin\$solutionName"
 
-# Exclude projects
+# Do not build a .nupkg for these projects
 $excludeNupkgProjects = @(
     $projects[1]
 )
@@ -61,7 +61,7 @@ $platforms | ForEach-Object {
             -platform $platform `
             -version $packageVersion `
         
-        # Build .nupkg
+        # Build .nupkg if project is not excluded
         if(-not ($excludeNupkgProjects -contains $project)) {
             MyGet-Build-Nupkg -rootFolder $rootFolder `
                 -outputFolder $buildOutputPath `
