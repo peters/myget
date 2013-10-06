@@ -298,7 +298,7 @@ function MyGet-Build-Nupkg {
         [string]$nugetProperties = $null,
 
         # http://docs.nuget.org/docs/reference/command-line-reference#Pack_Command
-        [paramater(Position = 8, ValueFromPipeline = $true)]
+        [parameter(Position = 8, ValueFromPipeline = $true)]
         [string]$nugetPackOptions = $null
     )
     
@@ -334,7 +334,7 @@ function MyGet-Build-Nupkg {
     MyGet-Write-Diagnostic "Nupkg: $projectName ($platform / $config)"
     
     . $nugetExe pack $nuspec -OutputDirectory $outputFolder -Symbols -NonInteractive `
-        -Properties "$nugetProperties" -Version $version "$nugetPackOptions"
+        -Properties "$nugetProperties" -Version $version "$nugetOptions"
     
     if($LASTEXITCODE -ne 0) {
         MyGet-Die "Build failed: $projectName" -exitCode $LASTEXITCODE
