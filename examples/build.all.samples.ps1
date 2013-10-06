@@ -16,6 +16,6 @@ $configurations | ForEach-Object {
     . $examplesFolder\build.sample.anycpu-BUILD-SOLUTION-SPECIFIC-PROJECTS.ps1 -packageVersion $packageVersion -config $config
 
     # x86/x64
-    . $examplesFolder\build.sample.x86.x64-BUILD-SOLUTION.ps1 -packageVersion $packageVersion -config $config
+    . $examplesFolder\build.sample.mixedplatforms-BUILD-SOLUTION.ps1 -packageVersion $packageVersion -config $config
 
 }
