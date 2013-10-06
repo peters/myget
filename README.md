@@ -102,10 +102,6 @@ The ```myget.include.ps1``` script can be included by your ```build.ps1``` scrip
         <td>Debug|Release (You decide this value)</td>
     </tr>
     <tr>
-        <td>$targetframework$ **</td>
-        <td>net20, net35, net40, net45, net451</td>
-    </tr>
-    <tr>
         <td>$id$</td>
         <td>The Assembly name</td>
     </tr>
