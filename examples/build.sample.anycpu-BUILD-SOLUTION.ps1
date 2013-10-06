@@ -24,7 +24,7 @@ $rootFolder = Join-Path $rootFolder ..
 . $rootFolder\myget.include.ps1
 
 # Myget
-$packageVersion = MyGet-Package-Version $packageVersion
+$packageVersion = MyGet-Package-Version($packageVersion)
 
 # Solution
 $solutionName = "sample.solution.anycpu"
@@ -33,7 +33,7 @@ $outputFolder = Join-Path $rootFolder "bin\$solutionName"
 $nuspec = Join-Path $solutionFolder "$solutionName\$solutionName.nuspec"
 
 # Clean
-if($clean) { MyGet-Build-Clean $rootFolder }
+if($clean) { MyGet-Build-Clean($rootFolder) }
 
 # Platforms to build for
 $platforms | ForEach-Object {
@@ -43,13 +43,12 @@ $platforms | ForEach-Object {
     MyGet-Build-Solution -sln $solutionFolder\$solutionName.sln `
         -rootFolder $rootFolder `
         -outputFolder $outputFolder `
+        -version $packageVersion `
+        -config $config `
+        -target $target `
         -platforms $platforms `
         -targetFrameworks $targetFrameworks `
         -verbosity $verbosity `
-        -clean $clean `
-        -config $config `
-        -target $target `
-        -version $packageVersion `
         -nuspec $nuspec
 
 }

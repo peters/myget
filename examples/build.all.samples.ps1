@@ -10,10 +10,6 @@ $examplesFolder = Split-Path -parent $script:MyInvocation.MyCommand.Path
 $configurations | ForEach-Object {
     $config = $_
 	
-	# Run powershell unit tests for myget.include.ps1
-	git submodule update --init --recursive
-	#. $examplesFolder\powershelltests.ps1
-
     # AnyCpu
     . $examplesFolder\build.sample.anycpu-BUILD-SOLUTION.ps1 -packageVersion $packageVersion -config $config
     . $examplesFolder\build.sample.anycpu-BUILD-SOLUTION-SPECIFIC-PROJECT.ps1 -packageVersion $packageVersion -config $config
