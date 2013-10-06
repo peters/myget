@@ -8,8 +8,6 @@ Note these scripts will also work without a CI server, for example on your local
 
 Checkout the [examples](https://github.com/peters/myget/tree/master/examples).
 
-# Prerequisites
-
 If you want ```myget.include.ps1``` to work on you local computer you need to download
 the following prerequisites:
 
@@ -25,6 +23,12 @@ The final folder structure should resemble the following:
 * ```%LocalAppData%\MyGet\nuget```
 * ```%LocalAppData%\MyGet\xunit```
 * ```%LocalAppData%\MyGet\nunit```
+
+# Build the examples
+
+```
+.\examples\build.all.samples.ps1
+```
 
 # Available functions
 The ```myget.include.ps1``` script can be included by your ```build.ps1``` script to make use of the following functions:
@@ -174,12 +178,6 @@ The ```myget.include.ps1``` script can be included by your ```build.ps1``` scrip
         </td>
     </tr>
 </table>
-
-# Running the samples
-
-```
-.\build.all.samples.ps1
-```
 
 # License
 
