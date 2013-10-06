@@ -129,6 +129,17 @@ function MyGet-Normalize-Paths {
 
 }
 
+function MyGet-Normalize-Path {
+    param(
+        [parameter(Mandatory = $true)]
+        [string]$path
+    )
+
+    $path = [System.IO.Path]::GetFullPath($path)
+
+    return $path
+}
+
 # Build
 
 function MyGet-Build-Success {
@@ -212,6 +223,10 @@ function MyGet-Build-Nupkg {
 
     $projectName = [System.IO.Path]::GetFileName($project) -ireplace ".(sln|csproj)$", ""
 
+    $rootFolder = MyGet-Normalize-Path $rootFolder
+    $outputFolder = MyGet-Normalize-Path $outputFolder
+    $nuspec = MyGet-Normalize-Path $nuspec
+
     # Nuget
     $nugetCurrentFolder = [System.IO.Path]::GetDirectoryName($nuspec)
     $nugetExe = MyGet-NugetExe-Path
@@ -224,7 +239,7 @@ function MyGet-Build-Nupkg {
     ) -join ";"
 
     MyGet-Write-Diagnostic "Nupkg: $projectName ($platform / $config)"
-    
+   
     . $nugetExe pack $nuspec -OutputDirectory $outputFolder -Symbols -NonInteractive `
         -Properties "$nugetProperties" -Version $version
     
@@ -244,7 +259,7 @@ function MyGet-Build-Nupkg {
                 $filename = $_.Name
                 $fullpath = $_.FullName
 		
-		cp $fullpath $mygetBuildFolder\$filename
+		        cp $fullpath $mygetBuildFolder\$filename
             }
 
         }

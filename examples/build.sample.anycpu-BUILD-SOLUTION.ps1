@@ -18,7 +18,9 @@ param(
 )
 
 # Initialization
-$rootFolder = Split-Path -parent $script:MyInvocation.MyCommand.Definition
+$rootFolder = Split-Path -parent $script:MyInvocation.MyCommand.Path
+$rootFolder = Join-Path $rootFolder ..
+
 . $rootFolder\myget.include.ps1
 
 # Myget
