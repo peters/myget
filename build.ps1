@@ -9,7 +9,7 @@ $rootFolder = Split-Path -parent $script:MyInvocation.MyCommand.Path
 . $rootFolder\myget.include.ps1
 
 if(-not (MyGet-BuildRunner "myget")) {
-    MyGet-Die "Try running .\build.all.samples.ps1 DUDE!"
+    MyGet-Die "Try running .\examples\build.all.samples.ps1 DUDE!"
 }
 
 # Run powershell unit tests for myget.include.ps1
