@@ -8,6 +8,24 @@ Note these scripts will also work without a CI server, for example on your local
 
 Checkout the build.*.ps1 files in this repository. 
 
+# Prerequisites
+
+If you want ```myget.include.ps1``` to work on you local computer you need to download
+the following prerequisites:
+
+* [nuget command line tool](https://nuget.codeplex.com/releases)
+* [nunit console runner](http://www.nunit.org/index.php?p=download)
+* [xunit console runner](https://xunit.codeplex.com/releases) 
+
+Then you need to create a new environment variable called ```myget``` and
+extract each prerequisite to ```%LocalAppData%\MyGet```
+
+The final folder structure should resemble the following:
+
+* ```%LocalAppData%\MyGet\nuget```
+* ```%LocalAppData%\MyGet\xunit```
+* ```%LocalAppData%\MyGet\nunit```
+
 # Available functions
 The ```myget.include.ps1``` script can be included by your ```build.ps1``` script to make use of the following functions:
 
@@ -25,12 +43,19 @@ The ```myget.include.ps1``` script can be included by your ```build.ps1``` scrip
 * ```MyGet-Package-Version``` - returns the package version under build (empty if not run within MyGet Build Services)
 * ```MyGet-NunitExe-Path``` - path to the NUnit test runner
 * ```MyGet-XunitExe-Path``` - path to the XUnit test runner
+* ```MyGet-TargetFramework-To-Clr``` Target framework version to clr (e.g v2.0 -> net20)
+
+## Msbuild utility functions
+* ```MyGet-MsBuild-Get-ProjectName``` returns the project name
+* ```MyGet-MSBuild-Get-Project``` returns [Microsoft.Build.Evaluation.ProjectCollection](http://msdn.microsoft.com/en-us/library/microsoft.build.evaluation.projectcollection.aspx)
+* ```MyGet-MSBuild-Get-Property``` returns the value of a msbuild property
+* ```MyGet-MSBuild-Set-Property``` create / overwrite an existing msbuild property value
 
 ## Build steps
 * ```MyGet-Build-Bootstrap``` - starts a build (including NuGet package restore)
 * ```MyGet-Build-Solution``` - starts a build of a solution file
 * ```MyGet-Build-Project``` - starts a build of a project file
-* ```MyGet-Build-Nupkg``` - creates a NuGet package based on a specified .nuspec file. The .nuspec can contain additional replacement tokens (see further)
+* ```MyGet-Build-Nupkg``` - creates a NuGet package based on a specified .nuspec file. The .nuspec can contain [additional replacement tokens](https://github.com/peters/myget/edit/master/README.md#nuspec-substitutions)
 
 ## Test runners
 * ```MyGet-TestRunner-Nunit``` - invoke NUnit
@@ -66,6 +91,10 @@ The ```myget.include.ps1``` script can be included by your ```build.ps1``` scrip
     <tr>
         <td>$configuration$ **</td>
         <td>Debug|Release (You decide this value)</td>
+    </tr>
+    <tr>
+        <td>$targetframework$ **</td>
+        <td>net20, net35, net40, net45, net451</td>
     </tr>
     <tr>
         <td>$id$</td>
