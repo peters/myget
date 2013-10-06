@@ -51,11 +51,11 @@ The ```myget.include.ps1``` script can be included by your ```build.ps1``` scrip
 * ```MyGet-XunitExe-Path``` - path to the XUnit test runner
 * ```MyGet-TargetFramework-To-Clr``` Target framework version to clr (e.g v2.0 -> net20)
 
-## Msbuild utility functions
-* ```MyGet-MsBuild-Get-ProjectName``` returns the project name
+## MSBuild utility functions
+* ```MyGet-MSBuild-Get-ProjectName``` returns the project name
 * ```MyGet-MSBuild-Get-Project``` returns [Microsoft.Build.Evaluation.ProjectCollection](http://msdn.microsoft.com/en-us/library/microsoft.build.evaluation.projectcollection.aspx)
-* ```MyGet-MSBuild-Get-Property``` returns the value of a msbuild property
-* ```MyGet-MSBuild-Set-Property``` create / overwrite an existing msbuild property value
+* ```MyGet-MSBuild-Get-Property``` returns the value of a MSBuild property
+* ```MyGet-MSBuild-Set-Property``` create / overwrite an existing MSBuild property value
 
 ## Nuget utility functions
 * ```MyGet-NuGet-Get-PackagesPath``` returns value of ```repositorypath``` attribute in ```nuget.config``` for a given project folder
@@ -162,7 +162,7 @@ The ```myget.include.ps1``` script can be included by your ```build.ps1``` scrip
         </td>
     </tr>
     <tr>
-        <td>-verbosity (Msbuild)</td>
+        <td>-verbosity (MSBuild)</td>
         <td>
             Quiet, Minimal, Normal, Detailed, Diagnostic
         </td>
