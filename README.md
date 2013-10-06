@@ -52,7 +52,7 @@ The ```myget.include.ps1``` script can be included by your ```build.ps1``` scrip
 * ```MyGet-MSBuild-Set-Property``` create / overwrite an existing msbuild property value
 
 ## Nuget utility functions
-* ```MyGet-NuGet-Get-PackagesPath``` returns value of ```repositorypath``` in ```nuget.config``` for a given project folder
+* ```MyGet-NuGet-Get-PackagesPath``` returns value of ```repositorypath``` attribute in ```nuget.config``` for a given project folder
 
 ## Build steps
 * ```MyGet-Build-Bootstrap``` - starts a build (including NuGet package restore)
