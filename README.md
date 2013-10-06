@@ -24,7 +24,12 @@ The final folder structure should resemble the following:
 * ```%LocalAppData%\MyGet\xunit```
 * ```%LocalAppData%\MyGet\nunit```
 
-# Build the examples
+# Run unit tests
+```
+.\powershelltests.ps1
+```
+
+# Build all examples
 
 ```
 .\examples\build.all.samples.ps1
@@ -44,6 +49,8 @@ The ```myget.include.ps1``` script can be included by your ```build.ps1``` scrip
 * ```MyGet-Grep``` -grep-like function
 * ```MyGet-Normalize-Path``` normalize a file system path
 * ```MyGet-Normalize-Paths``` normalize an array of file system paths
+* ```MyGet-EnvironmentVariable``` returns value of an environment variable
+* ```MyGet-Set-EnvironmentVariable``` create / overwrite an existing environment variable value
 
 * ```MyGet-BuildRunner``` - returns the current build runner (empty if not run within MyGet Build Services)
 * ```MyGet-Package-Version``` - returns the package version under build (empty if not run within MyGet Build Services)

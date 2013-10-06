@@ -42,7 +42,7 @@ function MyGet-Create-Folder {
     )
      
     if(-not (Test-Path $folder)) {
-        [System.IO.Directory]::CreateDirectory($folder)
+        New-Item -ItemType Directory -Path $folder
     }
     
 }
@@ -66,12 +66,32 @@ function MyGet-Grep {
     return Get-ChildItem $folder | Where-Object { $_.FullName -match $pattern } 
 }
 
+function MyGet-EnvironmentVariable {
+    param(
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$name
+    )
+
+    return [Environment]::GetEnvironmentVariable($name)
+}
+
+function MyGet-Set-EnvironmentVariable {
+    param(
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$name,
+        [parameter(Position = 1, ValueFromPipeline = $true)]
+        [string]$value
+    )
+
+    [Environment]::SetEnvironmentVariable($name, $value)
+}
+
 function MyGet-BuildRunner {
     
-    $buildRunner = ""
+    $buildRunner = MyGet-EnvironmentVariable "BuildRunner"
 
-    if(Test-Path env:BuildRunner) {
-        $buildRunner = Get-Content env:BuildRunner
+    if([String]::IsNullOrEmpty($buildRunner)) {
+        return ""
     }
 
     return $buildRunner.tolower()
@@ -81,22 +101,26 @@ function MyGet-BuildRunner {
 function MyGet-Package-Version {
     param(
         [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
-        $packageVersion
+        [ValidatePattern("^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$")]
+        [string]$packageVersion
     )
 
-    if(Test-Path env:PackageVersion) { 
-        $packageVersion = Get-Content env:PackageVersion 
+    $buildRunner = MyGet-BuildRunner
+    if([String]::IsNullOrEmpty($buildRunner)) {
+        return $packageVersion
     }
 
-    if($packageVersion -eq "") {
-        MyGet-Die "Invalid package version"
+    $envPackageVersion = MyGet-EnvironmentVariable "PackageVersion"
+    if([String]::IsNullOrEmpty($envPackageVersion)) {
+        return $packageVersion
     }
 
-    return $packageVersion
+    return $envPackageVersion
+
 }
 
 function MyGet-NugetExe-Path {
-
+    
     if (Test-Path env:myget) {
         return Join-Path (Get-Content env:myget) "nuget\nuget.exe"
     } elseif(Test-Path env:nuget) { 
@@ -130,6 +154,16 @@ function MyGet-XunitExe-Path {
 
 }
 
+function MyGet-Normalize-Path {
+    param(
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$path
+    )
+
+    return [System.IO.Path]::GetFullPath($path)
+}
+
+
 function MyGet-Normalize-Paths {
     param(
         [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
@@ -149,19 +183,6 @@ function MyGet-Normalize-Paths {
         $i++;
     }
 
-    return $paths
-
-}
-
-function MyGet-Normalize-Path {
-    param(
-        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
-        [string]$path
-    )
-
-    $path = [System.IO.Path]::GetFullPath($path)
-
-    return $path
 }
 
 function MyGet-TargetFramework-To-Clr {
@@ -292,7 +313,7 @@ function MyGet-Build-Nupkg {
     $nuspec = MyGet-Normalize-Path $nuspec
 	
     $projectName = [System.IO.Path]::GetFileName($project) -ireplace ".(sln|csproj)$", ""
-	
+
     # Nuget
     $nugetCurrentFolder = [System.IO.Path]::GetDirectoryName($nuspec)
     $nugetExe = MyGet-NugetExe-Path
@@ -544,72 +565,6 @@ function MyGet-NuGet-Get-PackagesPath {
     }
 
     return MyGet-NuGet-PackagesPath($parent)
-}
-
-# Msbuild 
-
-function MyGet-MSBuild-Get-ProjectName {
-    # https://github.com/github/Shimmer/blob/master/src/CreateReleasePackage/tools/utilities.psm1#L36
-    param(
-        [parameter(Position=0, ValueFromPipeline = $true)]
-        [string[]]$projectName
-    )
-
-    if($projectName) {
-        $projects = MyGet-MSBuild-Get-Project $projectName
-    }
-    else {
-        # All projects by default
-        $projects = MyGet-MSBuild-Get-Project
-    }
-
-    $projects
-}
-
-function MyGet-MSBuild-Get-Project {
-    # https://github.com/github/Shimmer/blob/master/src/CreateReleasePackage/tools/utilities.psm1#L53
-    param(
-        [parameter(Position = 0, ValueFromPipeline = $true)]
-        [string[]]$projectName
-    )
-    Process {
-        (MyGet-MSBuild-Get-ProjectName $projectName) | % {
-            $path = $_.FullName
-            @([Microsoft.Build.Evaluation.ProjectCollection]::GlobalProjectCollection.GetLoadedProjects($path))[0]
-        }
-    }
-}
-
-function MyGet-MSBuild-Get-Property {
-    # https://github.com/github/Shimmer/blob/master/src/CreateReleasePackage/tools/utilities.psm1#L84
-    param(
-        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
-        $propertyName,
-        [parameter(Position = 1, ValueFromPipeline = $true)]
-        [string]$projectName
-    )
-
-    $buildProject = MyGet-MSBuild-Get-Project $projectName
-    $buildProject.GetProperty($propertyName)
-}
-
-function MyGet-MSBuild-Set-Property {
-    # https://github.com/github/Shimmer/blob/master/src/CreateReleasePackage/tools/utilities.psm1#L66
-    param(
-        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
-        $propertyName,
-        [parameter(Position = 1, Mandatory = $true, ValueFromPipeline = $true)]
-        $propertyValue,
-        [parameter(Position = 2, ValueFromPipeline = $true)]
-        [string[]]$projectName
-    )
-    Process {
-        (MyGet-MSBuild-Get-ProjectName $projectName) | %{
-            $buildProject = $_ | MyGet-MSBuild-Get-Project
-            $buildProject.SetProperty($propertyName, $propertyValue) | Out-Null
-            $_.Save()
-        }
-    }
 }
 
 # Test runners

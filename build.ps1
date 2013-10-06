@@ -17,4 +17,4 @@ git submodule update --init --recursive
 . $rootFolder\powershelltests.ps1
 
 # x86/x64
-. $rootFolder\build.sample.x86.x64-BUILD-SOLUTION.ps1 -packageVersion $packageVersion
+. $rootFolder\build.sample.mixedplatforms-BUILD-SOLUTION.ps1 -packageVersion $packageVersion

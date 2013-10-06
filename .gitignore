@@ -2,6 +2,8 @@
 [Bb]in/
 [Oo]bj/
 
+tests/*.xml
+
 # mstest test results
 TestResults
 
