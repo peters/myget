@@ -20,7 +20,7 @@
     <file src="$outputfolder$\v4.5\sample.solution.mixedplatforms.$platform$.exe" target="lib\net45" />
     <file src="$outputfolder$\v4.5.1\sample.solution.mixedplatforms.$platform$.exe" target="lib\net451" />
 
-    <file src="$nuspecfolder$\..\..\external\lib\unmanagedproject\$platform$\dummy.dll" target="lib\$platform$" />
-    <file src="$nuspecfolder$\..\..\external\lib\unmanagedproject\$platform$\dummy2.dll" target="lib\$platform$" />
+    <file src="$nuspecfolder$\..\..\external\lib\unmanagedproject\$platform$\dummy.dll" target="content" />
+    <file src="$nuspecfolder$\..\..\external\lib\unmanagedproject\$platform$\dummy2.dll" target="content" />
   </files>
 </package>
