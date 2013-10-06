@@ -38,6 +38,8 @@ The ```myget.include.ps1``` script can be included by your ```build.ps1``` scrip
 * ```MyGet-Create-Folder``` - create a new folder
 * ```MyGet-Build-Clean``` - recursive clean a folder
 * ```MyGet-Grep``` -grep-like function
+* ```MyGet-Normalize-Path``` normalize a file system path
+* ```MyGet-Normalize-Paths``` normalize an array of file system paths
 
 * ```MyGet-BuildRunner``` - returns the current build runner (empty if not run within MyGet Build Services)
 * ```MyGet-Package-Version``` - returns the package version under build (empty if not run within MyGet Build Services)
