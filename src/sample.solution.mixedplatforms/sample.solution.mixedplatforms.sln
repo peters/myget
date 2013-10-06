@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sample.solution.x86.x64", "sample.solution.x86.x64\sample.solution.x86.x64.csproj", "{2BF7657B-AB19-43C7-B794-805A10BBE77B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sample.solution.mixedplatforms", "sample.solution.mixedplatforms\sample.solution.mixedplatforms.csproj", "{2BF7657B-AB19-43C7-B794-805A10BBE77B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{72E7ABE3-4F37-4F06-9712-B3A53A3C16EB}"
 	ProjectSection(SolutionItems) = preProject
@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{72E7AB
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sample.solution.x86.x64.tests", "sample.solution.x86.x64.tests\sample.solution.x86.x64.tests.csproj", "{0ECAA57A-6B3C-4CAD-A1C8-D2C78B88EE9D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sample.solution.mixedplatforms.tests", "sample.solution.mixedplatforms.tests\sample.solution.mixedplatforms.tests.csproj", "{0ECAA57A-6B3C-4CAD-A1C8-D2C78B88EE9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

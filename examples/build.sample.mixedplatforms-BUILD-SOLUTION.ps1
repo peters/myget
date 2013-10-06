@@ -31,7 +31,7 @@ $packageVersion = MyGet-Package-Version $packageVersion
 if($clean) { MyGet-Build-Clean $rootFolder }
 
 # Solution
-$solutionName = "sample.solution.x86.x64"
+$solutionName = "sample.solution.mixedplatforms"
 $solutionFolder = "$rootFolder\src\$solutionName"
 $outputFolder = Join-Path $rootFolder "bin\$solutionName"
 $nuspec = Join-Path $solutionFolder "$solutionName\$solutionName.nuspec"

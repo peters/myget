@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>sample.solution.mixedplatforms.$platform$</id>
+    <version>$version$</version>
+    <title>sample.solution.mixedplatforms.$platform$</title>
+    <authors>Peter Sunde</authors>
+    <owners>Peter Sunde</owners>
+    <licenseUrl>https://github.com/peters/myget/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/peters/myget</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A sample $platform$ project</description>
+    <copyright>Peter Sunde 2013</copyright>
+    <tags>Your Tags Here</tags>
+  </metadata>
+  <files>
+    <file src="$outputfolder$\v2.0\sample.solution.mixedplatforms.$platform$.exe" target="lib\net20" />
+    <file src="$outputfolder$\v3.5\sample.solution.mixedplatforms.$platform$.exe" target="lib\net35" />
+    <file src="$outputfolder$\v4.0\sample.solution.mixedplatforms.$platform$.exe" target="lib\net40" />
+    <file src="$outputfolder$\v4.5\sample.solution.mixedplatforms.$platform$.exe" target="lib\net45" />
+    <file src="$outputfolder$\v4.5.1\sample.solution.mixedplatforms.$platform$.exe" target="lib\net451" />
+
+    <file src="$nuspecfolder$\..\..\external\lib\unmanagedproject\$platform$\dummy.dll" target="lib\$platform$" />
+    <file src="$nuspecfolder$\..\..\external\lib\unmanagedproject\$platform$\dummy2.dll" target="lib\$platform$" />
+  </files>
+</package>

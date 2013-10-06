@@ -2,7 +2,7 @@
 using System.IO;
 using NUnit.Framework;
 
-namespace sample.solution.x86.x64
+namespace sample.solution.mixedplatforms
 {
     internal static class Util
     {

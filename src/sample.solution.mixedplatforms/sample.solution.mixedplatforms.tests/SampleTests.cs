@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace sample.solution.x86.x64.tests
+namespace sample.solution.mixedplatforms.tests
 {
     [TestFixture]
     public class SampleTests
