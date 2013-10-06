@@ -6,7 +6,7 @@ Note these scripts will also work without a CI server, for example on your local
 
 # Getting started
 
-Checkout the build.*.ps1 files in this repository. 
+Checkout the [examples](https://github.com/peters/myget/tree/master/examples).
 
 # Prerequisites
 
