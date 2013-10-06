@@ -25,5 +25,8 @@
     <file src="$outputfolder$\v4.0\sample.solution.infrastructure.anycpu.dll" target="lib\net40" />
     <file src="$outputfolder$\v4.5\sample.solution.infrastructure.anycpu.dll" target="lib\net45" />
     <file src="$outputfolder$\v4.5.1\sample.solution.infrastructure.anycpu.dll" target="lib\net451" />
+	
+	<file src="$nuspecfolder$\..\..\external\lib\unmanagedproject\$platform$\dummy.dll" target="content" />
+    <file src="$nuspecfolder$\..\..\external\lib\unmanagedproject\$platform$\dummy2.dll" target="content" />
   </files>
 </package>
