@@ -1,4 +1,8 @@
+# MIT LICENSE
+
 # You can always find an updated version @ https://raw.github.com/peters/myget/master/myget.include.ps1
+
+# Heavily inspired by https://github.com/github/Shimmer
 
 # Miscellaneous
 
@@ -265,8 +269,6 @@ function MyGet-Build-Bootstrap {
 }
 
 function MyGet-Build-Nupkg {
-    # http://docs.nuget.org/docs/reference/command-line-reference#Pack_Command
-
     param(
         [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
         [string]$rootFolder,
@@ -293,7 +295,11 @@ function MyGet-Build-Nupkg {
         [string]$nuspec = $null,
 
         [parameter(Position = 7, ValueFromPipeline = $true)]
-        [string]$nugetProperties = $null
+        [string]$nugetProperties = $null,
+
+        # http://docs.nuget.org/docs/reference/command-line-reference#Pack_Command
+        [paramater(Position = 8, ValueFromPipeline = $true)]
+        [string]$nugetPackOptions = $null
     )
     
     if(-not (Test-Path $project)) {
@@ -328,7 +334,7 @@ function MyGet-Build-Nupkg {
     MyGet-Write-Diagnostic "Nupkg: $projectName ($platform / $config)"
     
     . $nugetExe pack $nuspec -OutputDirectory $outputFolder -Symbols -NonInteractive `
-        -Properties "$nugetProperties" -Version $version
+        -Properties "$nugetProperties" -Version $version "$nugetPackOptions"
     
     if($LASTEXITCODE -ne 0) {
         MyGet-Die "Build failed: $projectName" -exitCode $LASTEXITCODE
@@ -575,36 +581,9 @@ function MyGet-TestRunner-Nunit {
         [string[]]$projects
     )
 
-    MyGet-Write-Diagnostic "Running unit tests for: $csproj"
-    
-    $outputPath = [System.IO.Path]::GetTempFileName()
-    $consoleRunner = MyGet-NunitExe-Path
+    # see: https://github.com/github/Shimmer/blob/bfda6f3e13ab962ad63d81c661d43208070593e8/script/Run-UnitTests.ps1#L5
 
-    $args = $csproj
-    [object[]] $output = "$consoleRunner " + ($args -join " ")
-    $process = Start-Process -PassThru -NoNewWindow -RedirectStandardOutput $outputPath $consoleRunner ($args | %{ "`"$_`"" })
-
-    Wait-Process -InputObject $process -Timeout $timeoutDuration -ErrorAction SilentlyContinue
-    if ($process.HasExited) {
-        $output += Get-Content $outputPath
-        $exitCode = $process.ExitCode
-    } else {
-        $output += "Tests timed out. Backtrace:"
-        $output += Get-DotNetStack $process.Id
-        $exitCode = 9999
-    }
-
-    Stop-Process -InputObject $process
-    Remove-Item $outputPath
-
-    Write-Host $output
-
-    if(-not ($exitCode -eq 0)) {
-        MyGet-Die "Test failure. Exit code: $exitCode"
-    }
-
-    Write-Host "Test success."
-
+    MyGet-Die "Not implemented. Please contribute a PR @ https://www.github/peters/myget"
 }
 
 function MyGet-TestRunner-Xunit {
@@ -613,5 +592,7 @@ function MyGet-TestRunner-Xunit {
         [string[]]$projects
     ) 
     
+    # see: https://github.com/github/Shimmer/blob/bfda6f3e13ab962ad63d81c661d43208070593e8/script/Run-UnitTests.ps1#L5
+
     MyGet-Die "Not implemented. Please contribute a PR @ https://www.github/peters/myget"
 }
