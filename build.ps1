@@ -1,5 +1,9 @@
 ## THIS FILE IS USING TO BUILD A MYGET CI PACKAGE OF THIS REPOSITORY
 
+param(
+    [string] $packageVersion = ""
+)
+
 # Initialization
 $rootFolder = Split-Path -parent $script:MyInvocation.MyCommand.Path
 . $rootFolder\myget.include.ps1
@@ -16,4 +20,4 @@ git submodule update --init --recursive
 . $rootFolder\powershelltests.ps1
 
 # x86/x64
-. $rootFolder\build.sample.mixedplatforms-BUILD-SOLUTION.ps1 -packageVersion $packageVersion
+. $rootFolder\examples\build.sample.mixedplatforms-BUILD-SOLUTION.ps1 -packageVersion $packageVersion
