@@ -54,12 +54,12 @@ The ```myget.include.ps1``` script can be included by your ```build.ps1``` scrip
 
 * ```MyGet-BuildRunner``` - returns the current build runner (empty if not run within MyGet Build Services)
 * ```MyGet-Package-Version``` - returns the package version under build (empty if not run within MyGet Build Services)
-* ```MyGet-NunitExe-Path``` - path to the NUnit test runner (checks env:buildrunnertools, env:sourcespath, env:nunit)
-* ```MyGet-XunitExe-Path``` - path to the XUnit test runner (checks env:buildrunnertools, env:sourcespath, env:xunit)
+* ```MyGet-NunitExe-Path``` - path to the NUnit test runner (```env:buildrunnertools```, ```env:sourcespath```, ```env:nunit```)
+* ```MyGet-XunitExe-Path``` - path to the XUnit test runner (```env:buildrunnertools```, ```env:sourcespath```, ```env:xunit```)
 * ```MyGet-TargetFramework-To-Clr``` Target framework version to clr (e.g v2.0 -> net20)
 
 ## Nuget utility functions
-* ```MyGet-NugetExe-Path``` - path to NuGet (checks env:buildrunnertools, env:sourcespath, env:nuget)
+* ```MyGet-NugetExe-Path``` - path to NuGet (```env:buildrunnertools```, ```env:sourcespath```, ```env:nuget```)
 * ```MyGet-NuGet-Get-PackagesPath``` returns value of ```repositorypath``` attribute in ```nuget.config``` for a given project folder
 
 ## Build steps
