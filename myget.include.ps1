@@ -507,7 +507,7 @@ function MyGet-Build-Solution {
         [string[]]$platforms,
 
         [parameter(Position = 9, ValueFromPipeline = $true)]
-        [string]$verbosity = "quiet",
+        [string]$verbosity = "Minimal",
         
         [parameter(Position = 10, ValueFromPipeline = $true)]
         [string[]]$excludeNupkgProjects = @(),
