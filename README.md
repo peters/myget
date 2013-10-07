@@ -66,7 +66,7 @@ The ```myget.include.ps1``` script can be included by your ```build.ps1``` scrip
 * ```MyGet-Build-Bootstrap``` - starts a build (including NuGet package restore)
 * ```MyGet-Build-Solution``` - starts a build of a solution file
 * ```MyGet-Build-Project``` - starts a build of a project file
-* ```MyGet-Build-Nupkg``` - creates a NuGet package based on a specified .nuspec file. The .nuspec can contain [additional replacement tokens](https://github.com/peters/myget/edit/master/README.md#nuspec-substitutions)
+* ```MyGet-Build-Nupkg``` - creates a NuGet package based on a specified .nuspec file. The .nuspec can contain [additional replacement tokens](https://github.com/peters/myget/master/README.md#nuspec-substitutions)
 
 ## Test runners
 * ```MyGet-TestRunner-Nunit``` - invoke NUnit
