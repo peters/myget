@@ -104,19 +104,26 @@ function MyGet-BuildRunner {
 
 function MyGet-Package-Version {
     param(
-        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
-        [ValidatePattern("^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$")]
-        [string]$packageVersion
+        [string]$packageVersion = ""
     )
+
+    $semverRegex = "^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$"
 
     $buildRunner = MyGet-BuildRunner
     if([String]::IsNullOrEmpty($buildRunner)) {
+        if(-not ($packageVersion -match $semverRegex)) {
+            throw Exception("Invalid packageVersion")
+        }
         return $packageVersion
     }
 
     $envPackageVersion = MyGet-EnvironmentVariable "PackageVersion"
     if([String]::IsNullOrEmpty($envPackageVersion)) {
         return $packageVersion
+    }
+
+    if(-not ($envPackageVersion -match $semverRegex)) {
+        throw Exception("Invalid packageVersion")
     }
 
     return $envPackageVersion

@@ -141,16 +141,18 @@ Describe "Prerequisites" {
             MyGet-Package-Version "1.0.0-LOL01" | Should Be "1.0.0-NINJA"
         }
 
-        It "Should return a valid value if env:PackageVersion is empty" {            
+        It "Should throw if env:PackageVersion is invalid" {
             MyGet-Set-EnvironmentVariable PackageVersion ""
-            MyGet-Package-Version "0.0.1-TEST" | Should Be "0.0.1-TEST"
-        }
-
-        It "Should throw if packageversion is invalid" {
-            MyGet-Set-EnvironmentVariable PackageVersion "abc"
-            {    
+            {
+                MyGet-Package-Version $null | Should Throw
+                MyGet-Package-Version "" | Should Throw
                 MyGet-Package-Version "1.0.0" | Should Throw
             }
+        }
+
+        It "Should return a valid value if env:PackageVersion is set but input PackageVersion is null" {            
+            MyGet-Set-EnvironmentVariable PackageVersion "0.0.1-TEST1"
+            MyGet-Package-Version $null | Should Be "0.0.1-TEST1"
         }
 
         It "Should return a valid path to nuget.exe" {
@@ -183,16 +185,18 @@ Describe "Prerequisites" {
             MyGet-BuildRunner | Should BeNullOrEmpty
         }
 
-        It "Should return a valid value for env:PackageVersion" {
+        It "Should not use env:PackageVersion" {
             MyGet-Set-EnvironmentVariable PackageVersion ""
             MyGet-Package-Version "1.0.0-LOL" | Should Be "1.0.0-LOL"
         }
 
-        It "Should throw if packageversion is invalid" {
+        It "Should throw if PackageVersion is invalid" {
             MyGet-Set-EnvironmentVariable PackageVersion ""
             {
-                MyGet-Package-Version "abc" | Should Throw
+                MyGet-Package-Version $null | Should Throw
+                MyGet-Package-Version "" | Should Throw
             }
+            MyGet-Package-Version "1.0.0" | Should Be "1.0.0"
         }
 
         It "Should return a valid path to nuget.exe" {
