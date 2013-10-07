@@ -334,7 +334,7 @@ function MyGet-Build-Nupkg {
     MyGet-Write-Diagnostic "Nupkg: $projectName ($platform / $config)"
     
     . $nugetExe pack $nuspec -OutputDirectory $outputFolder -Symbols -NonInteractive `
-        -Properties "$nugetProperties" -Version $version "$nugetOptions"
+        -Properties "$nugetProperties" -Version $version "$nugetPackOptions"
     
     if($LASTEXITCODE -ne 0) {
         MyGet-Die "Build failed: $projectName" -exitCode $LASTEXITCODE
