@@ -157,24 +157,21 @@ Describe "Prerequisites" {
         }
 
         It "Should return a valid path to nuget.exe" {
-            MyGet-NugetExe-Path | Select-String {
-                Test-Path $_ | Should Be $true
-                Should Match "nuget.exe$" 
-            } 
+            $nuget = MyGet-NugetExe-Path 
+            (Test-Path $nuget) | Should Be $true
+            $nuget | Should Match "nuget.exe$" 
         }
 
         It "Should return a valid path to nunit-console.exe" {
-            MyGet-NunitExe-Path | Select-String { 
-                Test-Path $_ | Should Be $true
-                Should Match "nunit-console.exe$"
-            }
+            $nunit = MyGet-NunitExe-Path
+            (Test-Path $nunit) | Should Be $true
+            $nunit | Should Match "nunit-console.exe$"
         }
 
         It "Should return a valid path to xunit.console.clr4.x86.exe" {
-            MyGet-XunitExe-Path| Select-String { 
-                Test-Path $_ | Should Be $true
-                Should Match "xunit.console.clr4.x86.exe$"
-            }
+            $xunit = MyGet-XunitExe-Path
+            (Test-Path $xunit) | Should Be $true
+            $xunit | Should Match "xunit.console.clr4.x86.exe$"
         }
 
     }
@@ -201,24 +198,21 @@ Describe "Prerequisites" {
         }
 
         It "Should return a valid path to nuget.exe" {
-            MyGet-NugetExe-Path | Select-String {
-                Test-Path $_ | Should Be $true
-                Should Match "nuget.exe$" 
-            } 
+            $nuget = MyGet-NugetExe-Path 
+            (Test-Path $nuget) | Should Be $true
+            $nuget | Should Match "nuget.exe$" 
         }
 
         It "Should return a valid path to nunit-console.exe" {
-            MyGet-NunitExe-Path | Select-String { 
-                Test-Path $_ | Should Be $true
-                Should Match "nunit-console.exe$"
-            }
+            $nunit = MyGet-NunitExe-Path
+            (Test-Path $nunit) | Should Be $true
+            $nunit | Should Match "nunit-console.exe$"
         }
 
         It "Should return a valid path to xunit.console.clr4.x86.exe" {
-            MyGet-XunitExe-Path| Select-String { 
-                Test-Path $_ | Should Be $true
-                Should Match "xunit.console.clr4.x86.exe$"
-            }
+            $xunit = MyGet-XunitExe-Path
+            (Test-Path $xunit) | Should Be $true
+            $xunit | Should Match "xunit.console.clr4.x86.exe$"
         }
 
     }
