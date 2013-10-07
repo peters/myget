@@ -132,8 +132,10 @@ function MyGet-Package-Version {
 
 function MyGet-NugetExe-Path {
     
-    if (Test-Path env:myget) {
-        return Join-Path (Get-Content env:myget) "nuget\nuget.exe"
+    if (Test-Path env:buildrunnertools) {
+        return Join-Path (Get-Content env:buildrunnertools) "nuget\nuget.exe"
+    } elseif(Test-Path env:sourcespath) {         
+        return Join-Path (Get-Content env:sourcespath) "nuget\nuget.exe"
     } elseif(Test-Path env:nuget) { 
         return Get-Content env:nuget 
     }
@@ -143,8 +145,10 @@ function MyGet-NugetExe-Path {
 
 function MyGet-NunitExe-Path {
     
-    if (Test-Path env:myget) {
-        return Join-Path (Get-Content env:myget) "nunit\nunit-console.exe"
+    if (Test-Path env:buildrunnertools) {
+        return Join-Path (Get-Content env:buildrunnertools) "nunit\nunit-console.exe"
+    } elseif(Test-Path env:sourcespath) { 
+        return Join-Path (Get-Content env:sourcespath) "nunit\nunit-console.exe"
     } elseif(Test-Path env:nunit) { 
         return Get-Content env:nunit 
     }
@@ -155,8 +159,10 @@ function MyGet-NunitExe-Path {
 
 function MyGet-XunitExe-Path {
 
-    if (Test-Path env:myget) {
-        return Join-Path (Get-Content env:myget) "xunit\xunit.console.clr4.x86.exe"
+    if (Test-Path env:buildrunnertools) {
+        return Join-Path (Get-Content env:buildrunnertools) "xunit\xunit.console.clr4.x86.exe"
+    } elseif(Test-Path env:sourcespath) { 
+        return Join-Path (Get-Content env:sourcespath) "xunit\xunit.console.clr4.x86.exe"
     } elseif(Test-Path env:xunit) { 
         return Get-Content env:xunit 
     }

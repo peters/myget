@@ -15,14 +15,14 @@ the following prerequisites:
 * [nunit console runner](http://www.nunit.org/index.php?p=download)
 * [xunit console runner](https://xunit.codeplex.com/releases) 
 
-Then you need to create a new environment variable called ```myget``` and
-extract each prerequisite to ```%LocalAppData%\MyGet```
+Then you need to create a new environment variable called ```buildrunnertools``` and
+extract each prerequisite to ```%LocalAppData%\buildrunnertools```
 
 The final folder structure should resemble the following:
 
-* ```%LocalAppData%\MyGet\nuget```
-* ```%LocalAppData%\MyGet\xunit```
-* ```%LocalAppData%\MyGet\nunit```
+* ```%LocalAppData%\buildrunnertools\nuget```
+* ```%LocalAppData%\buildrunnertools\xunit```
+* ```%LocalAppData%\buildrunnertools\nunit```
 
 # Run unit tests
 ```
