@@ -1,4 +1,4 @@
-## THIS FILE IS USING TO BUILD A MYGET CI PACKAGE OF THIS REPOSITORY
+## Attempt to build a .nupkg for one of the sample projects using MyGet.org
 
 param(
     [string] $packageVersion = "",
