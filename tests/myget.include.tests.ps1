@@ -8,11 +8,6 @@ $fixturesFolder = Join-Path $scriptsPath "fixtures"
 $srcFolder = Join-Path $rootFolder "src"
 $examplesFolder = Join-Path $rootFolder "examples"
 
-# Do not destroy real buildrunner values when running
-# unit tests in a CI environment
-$_buildRunner = MyGet-BuildRunner
-$_packageVersion = if(-not ($_buildRunner -eq "")) { MyGet-Package-Version "0.0.0" }
-
 # Helpers
 
 function Create-Folder {
@@ -250,10 +245,4 @@ Describe "Build" {
 Describe "Cleanup" {
     MyGet-Set-EnvironmentVariable "BuildRunner" ""
     MyGet-Set-EnvironmentVariable "PackageVersion" ""
-}
-
-# Restore CI environment buildrunner variables
-if(-not ($_buildRunner -eq "")) {
-    $env:BuildRunner = $_buildRunner
-    $env:PackageVersion = $_packageVersion
 }

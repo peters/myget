@@ -17,7 +17,6 @@ param(
     [string]$config = "Release",
     [string]$target = "Rebuild",
     [string]$verbosity = "Minimal",
-
     [bool]$clean = $true
 )
 
@@ -27,7 +26,7 @@ $rootFolder = Join-Path $rootFolder ..
 
 . $rootFolder\myget.include.ps1
 
-# Myget
+# MyGet
 $packageVersion = MyGet-Package-Version $packageVersion
 
 # Solution
@@ -76,5 +75,3 @@ $platforms | ForEach-Object {
 
     }
 }
-
-MyGet-Build-Success

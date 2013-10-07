@@ -25,7 +25,7 @@ $rootFolder = Join-Path $rootFolder ..
 
 . $rootFolder\myget.include.ps1
 
-# Myget
+# MyGet
 $packageVersion = MyGet-Package-Version $packageVersion
 
 # Solution
@@ -67,5 +67,3 @@ $platforms | ForEach-Object {
 
     }
 }
-
-MyGet-Build-Success

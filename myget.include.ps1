@@ -112,7 +112,7 @@ function MyGet-Package-Version {
     $buildRunner = MyGet-BuildRunner
     if([String]::IsNullOrEmpty($buildRunner)) {
         if(-not ($packageVersion -match $semverRegex)) {
-            throw Exception("Invalid packageVersion")
+            throw Exception("Invalid package version input value")
         }
         return $packageVersion
     }
@@ -123,7 +123,7 @@ function MyGet-Package-Version {
     }
 
     if(-not ($envPackageVersion -match $semverRegex)) {
-        throw Exception("Invalid packageVersion")
+        throw Exception("Invalid package version value recieved from BuildRunner")
     }
 
     return $envPackageVersion

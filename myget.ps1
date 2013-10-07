@@ -16,8 +16,6 @@ $validBuildRunners = @("myget")
 if($fakeBuildRunner) {
     MyGet-Set-EnvironmentVariable "BuildRunner" "myget"
     MyGet-Set-EnvironmentVariable "PackageVersion" "1.0.0"
-} elseif(MyGet-BuildRunner -eq "") {
-    MyGet-Set-EnvironmentVariable "PackageVersion" ""
 }
 
 if(-not ($validBuildRunners -contains (MyGet-BuildRunner))) {
@@ -27,9 +25,16 @@ if(-not ($validBuildRunners -contains (MyGet-BuildRunner))) {
 # Get package version
 $packageVersion = MyGet-Package-Version $packageVersion
 
+# AnyCpu
+. $rootFolder\examples\build.sample.anycpu-BUILD-SOLUTION.ps1 -packageVersion $packageVersion
+
+# x86/x64
+. $rootFolder\examples\build.sample.mixedplatforms-BUILD-SOLUTION.ps1 -packageVersion $packageVersion
+
 # Run powershell unit tests for myget.include.ps1
 git submodule update --init --recursive
 . $rootFolder\powershelltests.ps1
 
-# x86/x64
-. $rootFolder\examples\build.sample.mixedplatforms-BUILD-SOLUTION.ps1 -packageVersion $packageVersion
+# Ensure to always reset environment variables (applies to local computer)
+MyGet-Set-EnvironmentVariable "BuildRunner" ""
+MyGet-Set-EnvironmentVariable "PackageVersion" ""
