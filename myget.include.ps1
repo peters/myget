@@ -624,7 +624,7 @@ if(-not (Test-Path $buildRunnerToolsFolder)) {
 
     MyGet-Write-Diagnostic "Downloading prerequisites"
 
-	git clone --depth=1 https://github.com/peters/BuildTools.git $buildRunnerToolsFolder
+	git clone --depth=1 https://github.com/myget/BuildTools.git $buildRunnerToolsFolder
 
     $(Get-Item $buildRunnerToolsFolder).Attributes = ‘Hidden’
 
