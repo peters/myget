@@ -4,6 +4,10 @@
 
 # Heavily inspired by https://github.com/github/Shimmer
 
+# Prerequisites (should add .buildrunnertools to your .(git|hg)ignore)
+$buildRunnerToolsFolder = Split-Path $MyInvocation.MyCommand.Path
+$buildRunnerToolsFolder = Join-Path $buildRunnerToolsFolder ".buildtools"
+
 # Miscellaneous
 
 function MyGet-Write-Diagnostic {
@@ -131,40 +135,46 @@ function MyGet-Package-Version {
 }
 
 function MyGet-NugetExe-Path {
-    
-    if (Test-Path env:buildrunnertools) {
-        return Join-Path (Get-Content env:buildrunnertools) "nuget\nuget.exe"
-    } elseif(Test-Path env:sourcespath) {         
-        return Join-Path (Get-Content env:sourcespath) "nuget\nuget.exe"
-    } elseif(Test-Path env:nuget) { 
-        return Get-Content env:nuget 
+    param(
+        [ValidateSet("2.5", "2.6", "2.7", "latest")]
+        [string] $version = "latest"
+    )
+
+    # Test environment variable
+    if((MyGet-BuildRunner -eq "myget") -and (Test-Path env:nuget)) {
+        return $env:nuget
     }
-    
-    MyGet-Die "Could not find nuget executable"
+
+    $nuget = Join-Path $buildRunnerToolsFolder "tools\nuget\$version\nuget.exe"
+    if (Test-Path $nuget) {
+        return $nuget
+    }
+
+    MyGet-Die "Could not find nuget executable: $nuget"
 }
 
 function MyGet-NunitExe-Path {
-    
-    if (Test-Path env:buildrunnertools) {
-        return Join-Path (Get-Content env:buildrunnertools) "nunit\nunit-console.exe"
-    } elseif(Test-Path env:sourcespath) { 
-        return Join-Path (Get-Content env:sourcespath) "nunit\nunit-console.exe"
-    } elseif(Test-Path env:nunit) { 
-        return Get-Content env:nunit 
+    param(
+        [ValidateSet("2.6.2", "latest")]
+        [string] $version = "latest"
+    )
+
+    $nunit = Join-Path $buildRunnerToolsFolder "tools\nunit\$version\nunit-console.exe"
+    if (Test-Path $nunit) {
+        return $nunit
     }
-
-    MyGet-Die "Could not find nunit executable"
-
+ 
 }
 
 function MyGet-XunitExe-Path {
+    param(
+        [ValidateSet("1.9.2", "latest")]
+        [string] $version = "latest"
+    )
 
-    if (Test-Path env:buildrunnertools) {
-        return Join-Path (Get-Content env:buildrunnertools) "xunit\xunit.console.clr4.x86.exe"
-    } elseif(Test-Path env:sourcespath) { 
-        return Join-Path (Get-Content env:sourcespath) "xunit\xunit.console.clr4.x86.exe"
-    } elseif(Test-Path env:xunit) { 
-        return Get-Content env:xunit 
+    $xunit = Join-Path $buildRunnerToolsFolder "tools\xunit\$version\xunit.console.clr4.x86.exe"
+    if (Test-Path $xunit) {
+        return $xunit
     }
 
     MyGet-Die "Could not find xunit executable"
@@ -608,4 +618,14 @@ function MyGet-TestRunner-Xunit {
     # see: https://github.com/github/Shimmer/blob/bfda6f3e13ab962ad63d81c661d43208070593e8/script/Run-UnitTests.ps1#L5
 
     MyGet-Die "Not implemented. Please contribute a PR @ https://www.github/peters/myget"
+}
+
+if(-not (Test-Path $buildRunnerToolsFolder)) {
+
+    MyGet-Write-Diagnostic "Downloading prerequisites"
+
+	git clone --depth=1 https://github.com/peters/BuildTools.git $buildRunnerToolsFolder
+
+    $(Get-Item $buildRunnerToolsFolder).Attributes = ‘Hidden’
+
 }

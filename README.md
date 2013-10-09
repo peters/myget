@@ -8,21 +8,9 @@ Note these scripts will also work without a CI server, for example on your local
 
 Checkout the [examples](https://github.com/peters/myget/tree/master/examples).
 
-If you want ```myget.include.ps1``` to work on you local computer you need to download
-the following prerequisites:
+If you want ```myget.include.ps1``` to work on you local computer you need to have [msysgit](https://code.google.com/p/msysgit/downloads/list) installed.
 
-* [nuget command line tool](https://nuget.codeplex.com/releases)
-* [nunit console runner](http://www.nunit.org/index.php?p=download)
-* [xunit console runner](https://xunit.codeplex.com/releases) 
-
-Then you need to create a new environment variable called ```buildrunnertools``` and
-extract each prerequisite to ```%LocalAppData%\buildrunnertools```
-
-The final folder structure should resemble the following:
-
-* ```%LocalAppData%\buildrunnertools\nuget```
-* ```%LocalAppData%\buildrunnertools\xunit```
-* ```%LocalAppData%\buildrunnertools\nunit```
+You might want to add `.buildtools` in your .gitignore.
 
 # Run unit tests
 ```
@@ -54,12 +42,12 @@ The ```myget.include.ps1``` script can be included by your ```build.ps1``` scrip
 
 * ```MyGet-BuildRunner``` - returns the current build runner (empty if not run within MyGet Build Services)
 * ```MyGet-Package-Version``` - returns the package version under build (empty if not run within MyGet Build Services)
-* ```MyGet-NunitExe-Path``` - path to the NUnit test runner (```env:buildrunnertools```, ```env:sourcespath```, ```env:nunit```)
-* ```MyGet-XunitExe-Path``` - path to the XUnit test runner (```env:buildrunnertools```, ```env:sourcespath```, ```env:xunit```)
+* ```MyGet-NunitExe-Path``` - path to the NUnit test runner 
+* ```MyGet-XunitExe-Path``` - path to the XUnit test runner
 * ```MyGet-TargetFramework-To-Clr``` Target framework version to clr (e.g v2.0 -> net20)
 
 ## Nuget utility functions
-* ```MyGet-NugetExe-Path``` - path to NuGet (```env:buildrunnertools```, ```env:sourcespath```, ```env:nuget```)
+* ```MyGet-NugetExe-Path``` - path to NuGet 
 * ```MyGet-NuGet-Get-PackagesPath``` returns value of ```repositorypath``` attribute in ```nuget.config``` for a given project folder
 
 ## Build steps
