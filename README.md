@@ -10,7 +10,7 @@ Checkout the [examples](https://github.com/peters/myget/tree/master/examples).
 
 If you want ```myget.include.ps1``` to work on you local computer you need to have [msysgit](https://code.google.com/p/msysgit/downloads/list) installed.
 
-You might want to add `.buildtools` in your .gitignore.
+You might want to add `.buildtools` to your .gitignore.
 
 # Run unit tests
 ```
