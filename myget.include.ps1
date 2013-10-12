@@ -4,7 +4,7 @@
 
 # Heavily inspired by https://github.com/github/Shimmer
 
-# Prerequisites (should add .buildrunnertools to your .(git|hg)ignore)
+# Prerequisites (You should add .buildtools to your .(git|hg)ignore)
 $buildRunnerToolsFolder = Split-Path $MyInvocation.MyCommand.Path
 $buildRunnerToolsFolder = Join-Path $buildRunnerToolsFolder ".buildtools"
 
@@ -626,6 +626,6 @@ if(-not (Test-Path $buildRunnerToolsFolder)) {
 
 	git clone --depth=1 https://github.com/myget/BuildTools.git $buildRunnerToolsFolder
 
-    $(Get-Item $buildRunnerToolsFolder).Attributes = ‘Hidden’
+    $(Get-Item $buildRunnerToolsFolder).Attributes = ï¿½Hiddenï¿½
 
 }
