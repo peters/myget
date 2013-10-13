@@ -626,6 +626,6 @@ if(-not (Test-Path $buildRunnerToolsFolder)) {
 
 	git clone --depth=1 https://github.com/myget/BuildTools.git $buildRunnerToolsFolder
 
-    $(Get-Item $buildRunnerToolsFolder).Attributes = �Hidden�
+    $(Get-Item $buildRunnerToolsFolder).Attributes = "Hidden"
 
 }
