@@ -322,7 +322,11 @@ function MyGet-Build-Nupkg {
 
         # http://docs.nuget.org/docs/reference/command-line-reference#Pack_Command
         [parameter(Position = 8, ValueFromPipeline = $true)]
-        [string]$nugetPackOptions = $null
+        [string]$nugetPackOptions = $null,
+
+        [parameter(Position = 9, ValueFromPipeline = $true)]
+        [string]$nugetIncludeSymbols = $true
+
     )
     
     if(-not (Test-Path $project)) {
@@ -356,8 +360,13 @@ function MyGet-Build-Nupkg {
 
     MyGet-Write-Diagnostic "Nupkg: $projectName ($platform / $config)"
     
-    . $nugetExe pack $nuspec -OutputDirectory $outputFolder -Symbols -NonInteractive `
+    if($nugetIncludeSymbols -eq $true) {
+        . $nugetExe pack $nuspec -OutputDirectory $outputFolder -Symbols  -NonInteractive `
+            -Properties "$nugetProperties" -Version $version "$nugetPackOptions"
+    } else {
+        . $nugetExe pack $nuspec -OutputDirectory $outputFolder -NonInteractive `
         -Properties "$nugetProperties" -Version $version "$nugetPackOptions"
+    }
     
     if($LASTEXITCODE -ne 0) {
         MyGet-Die "Build failed: $projectName" -exitCode $LASTEXITCODE
@@ -626,6 +635,6 @@ if(-not (Test-Path $buildRunnerToolsFolder)) {
 
 	git clone --depth=1 https://github.com/myget/BuildTools.git $buildRunnerToolsFolder
 
-    $(Get-Item $buildRunnerToolsFolder).Attributes = �Hidden�
+    $(Get-Item $buildRunnerToolsFolder).Attributes = "Hidden"
 
 }
