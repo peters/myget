@@ -415,19 +415,23 @@ function MyGet-Build-Project {
         [ValidatePattern("^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$")]
         [string]$version,
         
-        [parameter(Position = 6, Mandatory = $true, ValueFromPipeline = $true)]
+        [parameter(Position = 6, Mandatory = $false, ValueFromPipeline = $true)]
         [ValidateSet("v1.1", "v2.0", "v3.5", "v4.0", "v4.5", "v4.5.1")]
-        [string[]]$targetFrameworks,
+        [string[]]$targetFrameworks = @(),
 
-        [parameter(Position = 7, Mandatory = $true, ValueFromPipeline = $true)]
+        [parameter(Position = 7, Mandatory = $false, ValueFromPipeline = $true)]
+        [ValidateSet("v1.1", "v2.0", "v3.5", "v4.0", "v4.5", "v4.5.1")]
+        [string]$targetFramework = $null,
+
+        [parameter(Position = 8, Mandatory = $true, ValueFromPipeline = $true)]
         [ValidateSet("x86", "x64", "AnyCpu")]
         [string]$platform,
 
-        [parameter(Position = 8, Mandatory = $true, ValueFromPipeline = $true)]
+        [parameter(Position = 9, Mandatory = $true, ValueFromPipeline = $true)]
         [ValidateSet("Quiet", "Minimal", "Normal", "Detailed", "Diagnostic")]
         [string]$verbosity = "Minimal",
 
-        [parameter(Position = 9, ValueFromPipeline = $true)]
+        [parameter(Position = 10, ValueFromPipeline = $true)]
         [string]$MSBuildCustomProperties = $null
     )
 
@@ -442,6 +446,14 @@ function MyGet-Build-Project {
     }
 
     MyGet-Build-Bootstrap $projectPath
+
+    if($targetFrameworks.Length -eq 0) {
+        $targetFrameworks += $targetFramework
+    }
+
+    if($targetFrameworks.Length -eq 0) {
+        MyGet-Die "Please provide a targetframework to build project for."
+    }
 
     $targetFrameworks | ForEach-Object {
         
