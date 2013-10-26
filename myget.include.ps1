@@ -285,7 +285,7 @@ function MyGet-Build-Bootstrap {
         . $nugetExe restore $project -NonInteractive
     }
 
-    MyGet-Grep $rootFolder -recursive $true -pattern ".packages.config$" | ForEach-Object {
+    MyGet-Grep -folder $solutionFolder -recursive $true -pattern ".packages.config$" | ForEach-Object {
         . $nugetExe restore $_.FullName -NonInteractive -SolutionDirectory $solutionFolder
     }
 
