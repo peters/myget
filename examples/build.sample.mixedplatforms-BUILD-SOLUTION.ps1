@@ -50,5 +50,9 @@ $platforms | ForEach-Object {
         -target $target `
         -version $packageVersion `
         -nuspec $nuspec
+    
+    # Run unit tests
+    MyGet-TestRunner-Nunit -rootFolder $rootFolder -buildFolder $outputFolder\$packageVersion `
+        -minTargetFramework v4.5.1
 
 }

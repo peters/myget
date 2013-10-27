@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using NUnit.Framework;
 
 namespace sample.solution.mixedplatforms
 {
@@ -22,9 +21,15 @@ namespace sample.solution.mixedplatforms
             var assemblyFolder = Path.GetDirectoryName(typeof(Program).Assembly.Location);
             var nativeFolder = Path.Combine(assemblyFolder, Util.IsX64() ? "x64" : "x86");
 
-            Assert.That(File.Exists(Path.Combine(assemblyFolder, "nunit.framework.dll")), Is.True);
-            Assert.That(File.Exists(Path.Combine(nativeFolder, "dummy.dll")), Is.True);
-            Assert.That(File.Exists(Path.Combine(nativeFolder, "dummy2.dll")), Is.True);
+            if (!File.Exists(Path.Combine(nativeFolder, "dummy.dll")))
+            {
+                throw new FileNotFoundException("dummy.dll");
+            }
+
+            if (!File.Exists(Path.Combine(nativeFolder, "dummy2.dll")))
+            {
+                throw new FileNotFoundException("dummy2.dll");
+            }
 
             Console.WriteLine("Success.");
 
