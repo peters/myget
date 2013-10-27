@@ -12,6 +12,8 @@ namespace sample.solution.anycpu
             
             Assert.That(File.Exists(Path.Combine(assemblyFolder, "nunit.framework.dll")), Is.True);
 
+            Console.WriteLine("Success.");
+
             Environment.Exit(0);
         }
     }

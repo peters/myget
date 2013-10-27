@@ -1237,14 +1237,63 @@ function MyGet-NuGet-Get-PackagesPath {
 # Test runners
 
 function MyGet-TestRunner-Nunit {
+    # documentation: http://www.nunit.org/index.php?p=consoleCommandLine&r=2.6.3
+
     param(
         [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
-        [string[]]$projects
+        [string]$rootFolder,
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$buildFolder,
+        [parameter(Position = 1, Mandatory = $false, ValueFromPipeline = $true)]
+        [string]$runnerOptions = "/noshadow",
+        [parameter(Position = 2, Mandatory = $false, ValueFromPipeline = $true)]
+        [string]$filter = "tests?.*.dll$"
     )
 
-    # see: https://github.com/github/Shimmer/blob/bfda6f3e13ab962ad63d81c661d43208070593e8/script/Run-UnitTests.ps1#L5
+    $consoleRunner = Join-Path (Split-Path -Parent (MyGet-NunitExe-Path)) "nunit-console-x86.exe"
+    $net20 = @()
+    $net40 = @()
 
-    MyGet-Die "Not implemented. Please contribute a PR @ https://www.github/peters/myget"
+    Get-ChildItem $buildFolder -Recurse | Where-Object { $_.FullName -match $filter } | ForEach-Object {
+        $fullPath = $_.FullName
+        $assemblyInfo = MyGet-AssemblyInfo $fullPath
+
+        if($fullPath -match "x64") {
+            return
+        }
+
+        if($assemblyInfo.ModuleAttributes -contains "ILOnly") {
+            if($assemblyInfo.TargetFramework -eq "NET20") {
+                $net20 += $fullPath
+            } else {
+                $net40 += $fullPath
+            }
+        } else {
+            Write-Output "Skipped test library $fullPath because it's not .NET assembly"
+        }
+      
+    }
+
+    if($net20 -ne 0) {
+
+        MyGet-Write-Diagnostic "Nunit: Running tests (clr: v2.0)"    
+
+        . $consoleRunner $runnerOptions /framework:"net-2.0" /xml:"$buildFolder\result-v2.0.xml" $net20
+
+    }
+
+    if($net40 -ne 0) {
+
+        MyGet-Write-Diagnostic "Nunit: Running tests (clr: v4.0)"   
+
+        . $consoleRunner $runnerOptions /framework:"net-4.0" /xml:"$buildFolder\result-v4.0.xml" $net40
+
+    }
+
+    if($LASTEXITCODE -ne 0) {
+        MyGet-Die "Test failure" -exitCode $LASTEXITCODE
+    }
+
 }
 
 function MyGet-TestRunner-Xunit {

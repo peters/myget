@@ -7,6 +7,7 @@ $rootFolder = Join-Path $scriptsPath ..
 $fixturesFolder = Join-Path $scriptsPath "fixtures"
 $srcFolder = Join-Path $rootFolder "src"
 $examplesFolder = Join-Path $rootFolder "examples"
+$buildOutputFolder = Join-Path $rootFolder "bin"
 
 # Helpers
 
@@ -262,19 +263,11 @@ Describe "Nuget" {
     }
 }
 
-Describe "Build" {
-    #Context "Test Runners" {
-        #It "Should run nunit test suite" {
-            # TODO: Please contribute a PR @ https://www.github/peters/myget 
-        #}
-
-        #It "Should run xunit test suite" {
-            # TODO: Please contribute a PR @ https://www.github/peters/myget
-        #}
-    #}
-}
-
 Describe "Cleanup" {
-    MyGet-Set-EnvironmentVariable "BuildRunner" ""
-    MyGet-Set-EnvironmentVariable "PackageVersion" ""
+    It "Should reset environment settings" {
+        MyGet-Set-EnvironmentVariable "BuildRunner" ""
+        MyGet-EnvironmentVariable "BuildRunner" | Should BeNullOrEmpty
+        MyGet-Set-EnvironmentVariable "PackageVersion" ""
+        MyGet-EnvironmentVariable "PackageVersion" | Should BeNullOrEmpty
+    }
 }

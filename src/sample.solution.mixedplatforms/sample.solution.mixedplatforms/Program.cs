@@ -26,6 +26,8 @@ namespace sample.solution.mixedplatforms
             Assert.That(File.Exists(Path.Combine(nativeFolder, "dummy.dll")), Is.True);
             Assert.That(File.Exists(Path.Combine(nativeFolder, "dummy2.dll")), Is.True);
 
+            Console.WriteLine("Success.");
+
             Environment.Exit(0);
         }
 

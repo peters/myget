@@ -14,11 +14,11 @@
     <tags>Your Tags Here</tags>
   </metadata>
   <files>
-    <file src="$outputfolder$\v2.0\sample.solution.mixedplatforms.$platform$.exe" target="lib\net20" />
-    <file src="$outputfolder$\v3.5\sample.solution.mixedplatforms.$platform$.exe" target="lib\net35" />
-    <file src="$outputfolder$\v4.0\sample.solution.mixedplatforms.$platform$.exe" target="lib\net40" />
-    <file src="$outputfolder$\v4.5\sample.solution.mixedplatforms.$platform$.exe" target="lib\net45" />
-    <file src="$outputfolder$\v4.5.1\sample.solution.mixedplatforms.$platform$.exe" target="lib\net451" />
+    <file src="$outputfolder$\v2.0\sample.solution.mixedplatforms.exe" target="lib\net20" />
+    <file src="$outputfolder$\v3.5\sample.solution.mixedplatforms.exe" target="lib\net35" />
+    <file src="$outputfolder$\v4.0\sample.solution.mixedplatforms.exe" target="lib\net40" />
+    <file src="$outputfolder$\v4.5\sample.solution.mixedplatforms.exe" target="lib\net45" />
+    <file src="$outputfolder$\v4.5.1\sample.solution.mixedplatforms.exe" target="lib\net451" />
 
     <file src="$nuspecfolder$\..\..\external\lib\unmanagedproject\$platform$\dummy.dll" target="content" />
     <file src="$nuspecfolder$\..\..\external\lib\unmanagedproject\$platform$\dummy2.dll" target="content" />
