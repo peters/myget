@@ -132,7 +132,7 @@ Describe "Utilitites" {
     It "Should be able to grep for a list of files" {
         
         $files = MyGet-Grep $rootFolder -pattern ".packages.config$"
-        $files.Count | Should be 5
+        $files.Count | Should be 3
 
         $files = MyGet-Grep $rootFolder -recursive $false -pattern ".packages.config$"
         $files.Count | Should be 0
