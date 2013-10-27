@@ -1245,7 +1245,7 @@ function MyGet-TestRunner-Nunit {
         [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
         [string]$buildFolder,
         [parameter(Position = 1, Mandatory = $false, ValueFromPipeline = $true)]
-        [string]$options = "/noshadow /nologo",
+        [string]$options = "/nologo",
         [parameter(Position = 2, Mandatory = $false, ValueFromPipeline = $true)]
         [string]$filter = "tests.*.dll$",
         [parameter(Position = 3, Mandatory = $false, ValueFromPipeline = $true)]
