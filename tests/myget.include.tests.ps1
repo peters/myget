@@ -7,6 +7,7 @@ $rootFolder = Join-Path $scriptsPath ..
 $fixturesFolder = Join-Path $scriptsPath "fixtures"
 $srcFolder = Join-Path $rootFolder "src"
 $examplesFolder = Join-Path $rootFolder "examples"
+$buildOutputFolder = Join-Path $rootFolder "bin"
 
 # Helpers
 
@@ -108,13 +109,23 @@ Describe "Utilitites" {
 
     }
 
-    It "Should transform targetframework to clr targetframework value" {
+    It "Should transform targetframework to clr runtime" {
 
         MyGet-TargetFramework-To-Clr "v2.0" | Should Be "net20"
         MyGet-TargetFramework-To-Clr "v3.5" | Should Be "net35"
         MyGet-TargetFramework-To-Clr "v4.0" | Should Be "net40"
         MyGet-TargetFramework-To-Clr "v4.5" | Should Be "net45"
         MyGet-TargetFramework-To-Clr "v4.5.1" | Should Be "net451"
+
+    }
+
+    It "Should transform clr runtime to targetframework" {
+
+        MyGet-Clr-To-TargetFramework "net20" | Should Be "v2.0"
+        MyGet-Clr-To-TargetFramework "net35" | Should Be "v3.5"
+        MyGet-Clr-To-TargetFramework "net40" | Should Be "v4.0"
+        MyGet-Clr-To-TargetFramework "net45" | Should Be "v4.5"
+        MyGet-Clr-To-TargetFramework "net451" | Should Be "v4.5.1"
 
     }
 
@@ -126,6 +137,22 @@ Describe "Utilitites" {
         $files = MyGet-Grep $rootFolder -recursive $false -pattern ".packages.config$"
         $files.Count | Should be 0
     }
+
+    It "Should read assembly info" {
+        $assemblyInfo = MyGet-AssemblyInfo (MyGet-NuGetExe-Path)
+
+        $assemblyInfo.ProcessorArchitecture | Should Be "AnyCpu"
+        $assemblyInfo.PEFormat | Should Be "PE32"
+        $assemblyInfo.Filename | Should Match "nuget.exe$"
+        $assemblyInfo.ModuleKind | Should Be "Console"
+        $assemblyInfo.ModuleAttributes | Should Be @("ILOnly", "Required32Bit", "StrongNameSigned")
+        $assemblyInfo.ModuleCharacteristics | Should Be @("DynamicBase", "NoSEH", "NXCompat", "TerminalServerAware")
+        $assemblyInfo.TargetFramework | Should Be "NET40"
+        $assemblyInfo.MajorRuntimeVersion | Should Be 2
+        $assemblyInfo.MinorRuntimeVersion | Should Be 5
+
+    }
+
 }
 
 Describe "Prerequisites" {
@@ -174,6 +201,12 @@ Describe "Prerequisites" {
             $xunit | Should Match "xunit.console.clr4.x86.exe$"
         }
 
+        It "Should return a valid path to curl.exe" {
+            $curl = MyGet-CurlExe-Path
+            (Test-Path $curl) | Should Be $true
+            $curl | Should Match "curl.exe$"
+        }
+
     }
 
     Context "Local computer" {
@@ -215,6 +248,12 @@ Describe "Prerequisites" {
             $xunit | Should Match "xunit.console.clr4.x86.exe$"
         }
 
+        It "Should return a valid path to curl.exe" {
+            $curl = MyGet-CurlExe-Path
+            (Test-Path $curl) | Should Be $true
+            $curl | Should Match "curl.exe$"
+        }
+
     }
 }
 
@@ -224,19 +263,11 @@ Describe "Nuget" {
     }
 }
 
-Describe "Build" {
-    #Context "Test Runners" {
-        #It "Should run nunit test suite" {
-            # TODO: Please contribute a PR @ https://www.github/peters/myget 
-        #}
-
-        #It "Should run xunit test suite" {
-            # TODO: Please contribute a PR @ https://www.github/peters/myget
-        #}
-    #}
-}
-
 Describe "Cleanup" {
-    MyGet-Set-EnvironmentVariable "BuildRunner" ""
-    MyGet-Set-EnvironmentVariable "PackageVersion" ""
+    It "Should reset environment settings" {
+        MyGet-Set-EnvironmentVariable "BuildRunner" ""
+        MyGet-EnvironmentVariable "BuildRunner" | Should BeNullOrEmpty
+        MyGet-Set-EnvironmentVariable "PackageVersion" ""
+        MyGet-EnvironmentVariable "PackageVersion" | Should BeNullOrEmpty
+    }
 }

@@ -45,6 +45,8 @@ The ```myget.include.ps1``` script can be included by your ```build.ps1``` scrip
 * ```MyGet-NunitExe-Path``` - path to the NUnit test runner 
 * ```MyGet-XunitExe-Path``` - path to the XUnit test runner
 * ```MyGet-TargetFramework-To-Clr``` Target framework version to clr (e.g v2.0 -> net20)
+* ```MyGet-TargetFramework-To-Clr``` Clr to target framework version (e.g net20 -> v2.0)
+* ```MyGet-AssemblyInfo```` Read miscellaneous information from a binary (e.g TargetFramework, Processor architecture ++)
 
 ## Nuget utility functions
 * ```MyGet-NugetExe-Path``` - path to NuGet 
@@ -59,6 +61,9 @@ The ```myget.include.ps1``` script can be included by your ```build.ps1``` scrip
 ## Test runners
 * ```MyGet-TestRunner-Nunit``` - invoke NUnit
 * ```MyGet-TestRunner-Xunit``` - invoke XUnit
+
+## [BuildTools](https://github.com/myget/BuildTools)
+* ```MyGet-CurlExe-Path``` - path to Curl
 
 # NuSpec substitutions
 

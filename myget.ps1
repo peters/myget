@@ -9,6 +9,9 @@ param(
 $rootFolder = Split-Path -parent $script:MyInvocation.MyCommand.Path
 . $rootFolder\myget.include.ps1
 
+# Build output folder
+$buildOutputFolder = Join-Path $rootFolder "bin"
+
 # Valid build runners
 $validBuildRunners = @("myget")
 
@@ -30,6 +33,9 @@ $packageVersion = MyGet-Package-Version $packageVersion
 
 # x86/x64
 . $rootFolder\examples\build.sample.mixedplatforms-BUILD-SOLUTION.ps1 -packageVersion $packageVersion
+
+# Run nunit tests
+MyGet-TestRunner-Nunit -rootFolder $rootFolder -buildFolder $buildOutputFolder
 
 # Run powershell unit tests for myget.include.ps1
 git submodule update --init --recursive
