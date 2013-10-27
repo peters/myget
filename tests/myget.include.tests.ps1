@@ -108,13 +108,23 @@ Describe "Utilitites" {
 
     }
 
-    It "Should transform targetframework to clr targetframework value" {
+    It "Should transform targetframework to clr runtime" {
 
         MyGet-TargetFramework-To-Clr "v2.0" | Should Be "net20"
         MyGet-TargetFramework-To-Clr "v3.5" | Should Be "net35"
         MyGet-TargetFramework-To-Clr "v4.0" | Should Be "net40"
         MyGet-TargetFramework-To-Clr "v4.5" | Should Be "net45"
         MyGet-TargetFramework-To-Clr "v4.5.1" | Should Be "net451"
+
+    }
+
+    It "Should transform clr runtime to targetframework" {
+
+        MyGet-Clr-To-TargetFramework "net20" | Should Be "v2.0"
+        MyGet-Clr-To-TargetFramework "net35" | Should Be "v3.5"
+        MyGet-Clr-To-TargetFramework "net40" | Should Be "v4.0"
+        MyGet-Clr-To-TargetFramework "net45" | Should Be "v4.5"
+        MyGet-Clr-To-TargetFramework "net451" | Should Be "v4.5.1"
 
     }
 

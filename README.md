@@ -45,6 +45,7 @@ The ```myget.include.ps1``` script can be included by your ```build.ps1``` scrip
 * ```MyGet-NunitExe-Path``` - path to the NUnit test runner 
 * ```MyGet-XunitExe-Path``` - path to the XUnit test runner
 * ```MyGet-TargetFramework-To-Clr``` Target framework version to clr (e.g v2.0 -> net20)
+* ```MyGet-TargetFramework-To-Clr``` Clr to target framework version (e.g net20 -> v2.0)
 
 ## Nuget utility functions
 * ```MyGet-NugetExe-Path``` - path to NuGet 

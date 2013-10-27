@@ -256,6 +256,36 @@ function MyGet-TargetFramework-To-Clr {
     return $clr
 }
 
+function MyGet-Clr-To-TargetFramework {
+    param(
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateSet("net20", "net35", "net40", "net45", "net451")]
+        [string]$clr
+    )
+
+    $targetFramework = $null
+
+    switch -Exact ($clr.ToLower()) {
+        "net20" {
+            $targetFramework = "v2.0"
+        }
+        "net35" {
+            $targetFramework = "v3.5"
+        } 
+        "net40" {
+            $targetFramework = "v4.0"
+        }
+        "net45" {
+            $targetFramework = "v4.5"
+        }
+        "net451" {
+            $targetFramework = "v4.5.1"
+        }
+    }
+
+    return $targetFramework
+}
+
 # Build
 
 function MyGet-Build-Success {
