@@ -1380,7 +1380,7 @@ function MyGet-TestRunner-Nunit {
         Write-Output $arguments | Sort-Object -Property FullName
         Write-Output ""
 
-        $xml = Join-Path $buildFolder "nunit-result.xml"
+        $xml = Join-Path $buildFolder "nunit-result-x86.xml"
         $arguments += ($options -split " ")
         $arguments += "/framework=$minClrRuntimeX86"
         $arguments += "/xml=$xml"
