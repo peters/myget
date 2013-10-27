@@ -1258,10 +1258,6 @@ function MyGet-TestRunner-Nunit {
         $fullPath = $_.FullName
         $assemblyInfo = MyGet-AssemblyInfo $fullPath
 
-        if($fullPath -match "x64") {
-            return
-        }
-
         if($assemblyInfo.ModuleAttributes -contains "ILOnly") {
             if($assemblyInfo.TargetFramework -eq "NET20") {
                 $net20 += $fullPath
