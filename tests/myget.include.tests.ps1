@@ -136,6 +136,22 @@ Describe "Utilitites" {
         $files = MyGet-Grep $rootFolder -recursive $false -pattern ".packages.config$"
         $files.Count | Should be 0
     }
+
+    It "Should read assembly info" {
+        $assemblyInfo = MyGet-AssemblyInfo (MyGet-NuGetExe-Path)
+
+        $assemblyInfo.ProcessorArchitecture | Should Be "AnyCpu"
+        $assemblyInfo.PEFormat | Should Be "PE32"
+        $assemblyInfo.Filename | Should Match "nuget.exe$"
+        $assemblyInfo.ModuleKind | Should Be "Console"
+        $assemblyInfo.ModuleAttributes | Should Be @("ILOnly", "Required32Bit", "StrongNameSigned")
+        $assemblyInfo.ModuleCharacteristics | Should Be @("DynamicBase", "NoSEH", "NXCompat", "TerminalServerAware")
+        $assemblyInfo.TargetFramework | Should Be "NET40"
+        $assemblyInfo.MajorRuntimeVersion | Should Be 2
+        $assemblyInfo.MinorRuntimeVersion | Should Be 5
+
+    }
+
 }
 
 Describe "Prerequisites" {
