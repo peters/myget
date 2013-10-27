@@ -177,7 +177,7 @@ function MyGet-NunitExe-Path {
     if (Test-Path $nunit) {
         return $nunit
     }
- 
+    MyGet-Die "Could not find nunit executable: $nunit"
 }
 
 function MyGet-XunitExe-Path {
