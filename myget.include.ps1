@@ -134,6 +134,20 @@ function MyGet-Package-Version {
 
 }
 
+function MyGet-CurlExe-Path {
+    param(
+        [ValidateSet("7.33.0", "latest")]
+        [string] $version = "latest"
+    )
+
+    $curl = Join-Path $buildRunnerToolsFolder "tools\curl\$version\curl.exe"
+    if (Test-Path $curl) {
+        return $curl
+    }
+
+    MyGet-Die "Could not find curl executable: $curl"
+}
+
 function MyGet-NugetExe-Path {
     param(
         [ValidateSet("2.5", "2.6", "2.7", "latest")]

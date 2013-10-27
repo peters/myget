@@ -174,6 +174,12 @@ Describe "Prerequisites" {
             $xunit | Should Match "xunit.console.clr4.x86.exe$"
         }
 
+        It "Should return a valid path to curl.exe" {
+            $curl = MyGet-CurlExe-Path
+            (Test-Path $curl) | Should Be $true
+            $curl | Should Match "curl.exe$"
+        }
+
     }
 
     Context "Local computer" {
@@ -213,6 +219,12 @@ Describe "Prerequisites" {
             $xunit = MyGet-XunitExe-Path
             (Test-Path $xunit) | Should Be $true
             $xunit | Should Match "xunit.console.clr4.x86.exe$"
+        }
+
+        It "Should return a valid path to curl.exe" {
+            $curl = MyGet-CurlExe-Path
+            (Test-Path $curl) | Should Be $true
+            $curl | Should Match "curl.exe$"
         }
 
     }
