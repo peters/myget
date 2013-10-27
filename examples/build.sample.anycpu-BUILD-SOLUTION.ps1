@@ -50,8 +50,8 @@ $platforms | ForEach-Object {
         -verbosity $verbosity `
         -nuspec $nuspec
 
-    # Run unit tests
-    MyGet-TestRunner-Nunit -rootFolder $rootFolder -buildFolder $outputFolder\$packageVersion `
-        -minTargetFramework v4.5.1
+    # Run unit tests 
+    MyGet-TestRunner-Nunit -rootFolder $rootFolder `
+        -buildFolder $outputFolder\$packageVersion\$platform\$config\v4.5.1
 
 }
