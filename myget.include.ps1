@@ -169,7 +169,7 @@ function MyGet-NugetExe-Path {
 
 function MyGet-NunitExe-Path {
     param(
-        [ValidateSet("2.6.2", "latest")]
+        [ValidateSet("2.6.2", "2.6.3", "latest")]
         [string] $version = "latest"
     )
 
