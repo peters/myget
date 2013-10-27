@@ -1245,49 +1245,143 @@ function MyGet-TestRunner-Nunit {
         [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
         [string]$buildFolder,
         [parameter(Position = 1, Mandatory = $false, ValueFromPipeline = $true)]
-        [string]$runnerOptions = "/noshadow",
+        [string]$options = "/noshadow /nologo",
         [parameter(Position = 2, Mandatory = $false, ValueFromPipeline = $true)]
-        [string]$filter = "tests?.*.dll$"
+        [string]$filter = "tests.*.dll$",
+        [parameter(Position = 3, Mandatory = $false, ValueFromPipeline = $true)]
+        [string]$minTargetFramework = "v2.0",
+        [parameter(Position = 4, Mandatory = $false, ValueFromPipeline = $true)]
+        [string]$version = "latest",
+        [parameter(Position = 5, Mandatory = $false, ValueFromPipeline = $true)]
+        [int16]$timeoutDuration = $([int16]::MaxValue)
     )
 
-    $consoleRunner = Join-Path (Split-Path -Parent (MyGet-NunitExe-Path)) "nunit-console-x86.exe"
+    $nunitExe = MyGet-NunitExe-Path
+    $nunitExeX86 = Join-Path (Split-Path -Parent $nunitExe) "nunit-console-x86.exe"
+    $minTargetFramework = (MyGet-TargetFramework-To-Clr $minTargetFramework).Substring(3)
+
+    # AnyCpu, X64
     $net20 = @()
     $net40 = @()
+    $net45 = @()
 
+    # X86
+    $net20X86 = @()
+    $net40X86 = @()
+    $net45X86 = @()
+
+    # Find all test libraries based on specified filter
     Get-ChildItem $buildFolder -Recurse | Where-Object { $_.FullName -match $filter } | ForEach-Object {
         $fullPath = $_.FullName
         $assemblyInfo = MyGet-AssemblyInfo $fullPath
 
+        # Only accepted managed libraries
         if($assemblyInfo.ModuleAttributes -contains "ILOnly") {
-            if($assemblyInfo.TargetFramework -eq "NET20") {
-                $net20 += $fullPath
-            } else {
-                $net40 += $fullPath
+            $tf = $assemblyInfo.TargetFramework
+            # Skip target frameworks that is not greater or equal
+            # to minimum accepted target framework
+            if(-not ($tf.Substring(3) -ge $minTargetFramework)) {
+                return
             }
+            if($assemblyInfo.ProcessorArchitecture -eq "AnyCpu") {                
+                if($tf -eq "NET20") {
+                    $net20X86 += $fullPath
+                } elseif($tf -eq "NET40") {
+                    $net40X86 += $fullPath
+                } else {
+                    $net45X86 += $fullPath
+                }
+            } else {
+                if($tf -eq "NET20") {
+                    $net20 += $fullPath
+                } elseif($tf -eq "NET40") {
+                    $net40 += $fullPath
+                } else {
+                    $net45 += $fullPath
+                }
+            }            
         } else {
             Write-Output "Skipped test library $fullPath because it's not .NET assembly"
         }
       
-    }
+    } 
 
-    if($net20 -ne 0) {
+    function TestSuite($nunit, $arguments) {
+        
+        $process = Start-Process -PassThru -NoNewWindow $nunit ($arguments | %{ "`"$_`"" })
+        Wait-Process -InputObject $process -Timeout $timeoutDuration
 
-        MyGet-Write-Diagnostic "Nunit: Running tests (clr: v2.0)"    
-
-        . $consoleRunner $runnerOptions /framework:"net-2.0" /xml:"$buildFolder\result-v2.0.xml" $net20
-
-    }
-
-    if($net40 -ne 0) {
-
-        MyGet-Write-Diagnostic "Nunit: Running tests (clr: v4.0)"   
-
-        . $consoleRunner $runnerOptions /framework:"net-4.0" /xml:"$buildFolder\result-v4.0.xml" $net40
+        $exitCode = $process.ExitCode
+        if($exitCode -ne 0) {
+            MyGet-Die "Test suite failed" -exitCode $exitCode
+        }
 
     }
 
-    if($LASTEXITCODE -ne 0) {
-        MyGet-Die "Test failure" -exitCode $LASTEXITCODE
+    # AnyCpu, X64
+    $minClrRuntime = $null
+    if($net45 -ne 0) {
+        $minClrRuntime = "net-4.5"
+    } elseif($net40 -ne 0) {
+        $minClrRuntime = "net-4.0"
+    } elseif($net20 -ne 0) {
+        $minClrRuntime = "net-2.0"
+    }
+
+    if($minClrRuntime -ne $null) {
+         
+        $arguments = @()
+        $net20 | ForEach-Object { $arguments += $_ }
+        $net40 | ForEach-Object { $arguments += $_ }
+        $net45 | ForEach-Object { $arguments += $_ }
+
+        $numProjects = $arguments.Length
+
+        MyGet-Write-Diagnostic "nunit-console.exe: Running tests for $numProjects projects."   
+
+        Write-Output ""
+        Write-Output $arguments | Sort-Object -Property FullName
+        Write-Output ""
+
+        $xml = Join-Path $buildFolder "nunit-result.xml"
+        $arguments += ($options -split " ")
+        $arguments += "/framework=$minClrRuntime"
+        $arguments += "/xml=$xml"
+
+        TestSuite -nunit $nunitExe -arguments $arguments
+    }
+
+    # X86
+    $minClrRuntimeX86 = $null
+    if($net45X86 -ne 0) {
+        $minClrRuntimeX86 = "net-4.5"
+    } elseif($net40X86 -ne 0) {
+        $minClrRuntimeX86 = "net-4.0"
+    } elseif($net20X86 -ne 0) {
+        $minClrRuntimeX86 = "net-2.0"
+    }
+
+    if($minClrRuntimeX86 -ne $null) {
+         
+        $arguments = @()
+        $net20X86 | ForEach-Object { $arguments += $_ }
+        $net40X86 | ForEach-Object { $arguments += $_ }
+        $net45X86 | ForEach-Object { $arguments += $_ }
+
+        $numProjects = $arguments.Length
+
+        MyGet-Write-Diagnostic "nunit-console-x86.exe: Running tests for $numProjects projects."   
+
+        Write-Output ""
+        Write-Output $arguments | Sort-Object -Property FullName
+        Write-Output ""
+
+        $xml = Join-Path $buildFolder "nunit-result.xml"
+        $arguments += ($options -split " ")
+        $arguments += "/framework=$minClrRuntimeX86"
+        $arguments += "/xml=$xml"
+
+        TestSuite -nunit $nunitExeX86 -arguments $arguments
     }
 
 }
