@@ -1258,7 +1258,14 @@ function MyGet-TestRunner-Nunit {
 
     $nunitExe = MyGet-NunitExe-Path
     $nunitExeX86 = Join-Path (Split-Path -Parent $nunitExe) "nunit-console-x86.exe"
+
+    # Filter test projects that has a older runtime that this value
     $minTargetFramework = (MyGet-TargetFramework-To-Clr $minTargetFramework).Substring(3)
+
+    # 4.5.1 -> 4.5
+    if($minTargetFramework -eq "451") {
+        $minTargetFramework = "45"
+    }
 
     # AnyCpu, X64
     $net20 = @()
@@ -1274,27 +1281,24 @@ function MyGet-TestRunner-Nunit {
     Get-ChildItem $buildFolder -Recurse | Where-Object { $_.FullName -match $filter } | ForEach-Object {
         $fullPath = $_.FullName
         $assemblyInfo = MyGet-AssemblyInfo $fullPath
-
-        # Only accepted managed libraries
+        # Only accept managed libraries
         if($assemblyInfo.ModuleAttributes -contains "ILOnly") {
-            $tf = $assemblyInfo.TargetFramework
-            # Skip target frameworks that is not greater or equal
-            # to minimum accepted target framework
-            if(-not ($tf.Substring(3) -ge $minTargetFramework)) {
+            $targetFramework = $assemblyInfo.TargetFramework.Substring(3)
+            if (-not ($targetFramework -ge $minTargetFramework)) {
                 return
             }
             if($assemblyInfo.ProcessorArchitecture -eq "AnyCpu") {                
-                if($tf -eq "NET20") {
+                if($targetFramework -eq "20") {
                     $net20X86 += $fullPath
-                } elseif($tf -eq "NET40") {
+                } elseif($targetFramework -eq "40") {
                     $net40X86 += $fullPath
                 } else {
                     $net45X86 += $fullPath
                 }
             } else {
-                if($tf -eq "NET20") {
+                if($targetFramework -eq "20") {
                     $net20 += $fullPath
-                } elseif($tf -eq "NET40") {
+                } elseif($targetFramework -eq "40") {
                     $net40 += $fullPath
                 } else {
                     $net45 += $fullPath
