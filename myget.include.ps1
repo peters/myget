@@ -1401,6 +1401,35 @@ function MyGet-TestRunner-Xunit {
     MyGet-Die "Not implemented. Please contribute a PR @ https://www.github/peters/myget"
 }
 
+# Squirrel
+
+function MyGet-Squirrel-New-Release {
+    param(
+        [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$solutionFolder,
+        [Parameter(Position = 1, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$buildFolder
+    )
+
+    $packagesDir = Join-Path $solutionFolder "packages"
+    
+    $commandsPsm1 = MyGet-Grep -folder $packagesDir -recursive $true `
+        -pattern "Shimmer.*commands.psm1$" | 
+        Sort-Object FullName -Descending |
+        Select-Object -first 1
+
+    if(-not (Test-Path $commandsPsm1.FullName)) {
+        MyGet-Die "Could not find any Squirrel nupkg's containing commands.psm1"
+    }  
+    
+    MyGet-Write-Diagnostic "Squirrel: Creating new release"  
+
+    Import-Module $commandsPsm1.FullName
+
+    New-ReleaseForPackage -SolutionDir $solutionFolder -BuildDir $buildFolder
+
+}
+
 if(-not (Test-Path $buildRunnerToolsFolder)) {
 
     MyGet-Write-Diagnostic "Downloading prerequisites"
