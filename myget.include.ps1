@@ -9,6 +9,9 @@ param(
     [bool] $updateSelf = $false
 )
 
+# Default error action when a MyGet-* function throws an error
+$ErrorActionPreference = "Stop"
+
 # Prerequisites (You should add .buildtools to your .(git|hg)ignore)
 $buildRunnerToolsFolder = Split-Path $MyInvocation.MyCommand.Path
 $buildRunnerToolsFolder = Join-Path $buildRunnerToolsFolder ".buildtools"
