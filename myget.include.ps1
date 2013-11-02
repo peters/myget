@@ -1,4 +1,6 @@
-# MIT LICENSE
+# MIT LICENSE (https://github.com/peters/myget/blob/master/myget.include.ps1)
+
+# Copyright Peter Rekdal Sunde 2013
 
 # Thanks to https://github.com/Squirrel/Squirrel.Windows 
 
