@@ -1430,6 +1430,44 @@ function MyGet-Squirrel-New-Release {
 
 }
 
+# Curl
+
+function MyGet-Curl-Upload {
+    # Example usage:
+
+    # Curl-Upload -protocol scp -usernameAndHost "myusername@scp.example.org" -privateKey id_rsa -publicKey id_rsa.pub `
+    # -filename myfilename.exe -remoteFilename /home/peters/myfilename.exe
+
+    param(
+        [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateSet("scp", "sftp")]
+        [string]$protocol,
+        [Parameter(Position = 1, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$usernameAndHost,
+        [Parameter(Position = 2, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$privateKey,
+        [Parameter(Position = 3, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$publicKey,
+        [Parameter(Position = 4, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$filename,
+        [Parameter(Position = 5, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$remoteFilename
+    )
+
+    $curlExe = MyGet-CurlExe-Path
+
+    # scp://username@scp.example.org:/home/peters/myfilename.exe
+    $connectionString = $protocol
+    $connectionString += "://"
+    $connectionString += $usernameAndHost
+    $connectionString += ":"
+    $connectionString += $remoteFilename
+
+   . $curlExe --insecure --progress-bar --upload-file $filename `
+    --key $privateKey --pubkey $publicKey $connectionString
+
+}
+
 if(-not (Test-Path $buildRunnerToolsFolder)) {
 
     MyGet-Write-Diagnostic "Downloading prerequisites"
