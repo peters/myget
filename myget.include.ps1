@@ -1465,14 +1465,11 @@ function MyGet-Curl-Upload-File {
 
     # Default *UNIX values
 
-    if($privateKey -eq "") {
+    if($privateKey -eq "" -and $publicKey -eq "") {
         $privateKey = "id_rsa"
-    }
-
-    if($publicKey -eq "") {
         $publicKey = "id_rsa.pub"
     }
-    
+        
     # Default to C:\Users\USERNAME\.ssh
     
     if(-not (Test-Path $privateKey) -and (-not [System.IO.Path]::IsPathRooted($privateKey))) {
