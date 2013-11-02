@@ -69,7 +69,7 @@ The ```myget.include.ps1``` script can be included by your ```build.ps1``` scrip
 * ```MyGet-Squirrel-New-Release``` - creates a new squirrel release
 
 ## [Curl](http://curl.haxx.se/docs/manpage.html)
-* ```MyGet-Curl-Upload``` - upload files using either scp or sftp (private/public key required)
+* ```MyGet-Curl-Upload-File``` - upload files using either scp or sftp (private/public key required)
 
 # NuSpec substitutions
 
