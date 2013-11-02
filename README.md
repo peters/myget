@@ -23,7 +23,7 @@ You might want to add `.buildtools` to your .gitignore.
 .\examples\build.all.samples.ps1
 ```
 
-# Update `myget.include.ps1`
+# Update myget.include.ps1
 
 ```
 .\myget.include.ps1 -updateSelf 1
