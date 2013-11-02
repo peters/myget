@@ -1432,39 +1432,121 @@ function MyGet-Squirrel-New-Release {
 
 # Curl
 
-function MyGet-Curl-Upload {
-    # Example usage:
-
-    # Curl-Upload -protocol scp -usernameAndHost "myusername@scp.example.org" -privateKey id_rsa -publicKey id_rsa.pub `
-    # -filename myfilename.exe -remoteFilename /home/peters/myfilename.exe
-
+function MyGet-Curl-Upload-File {
     param(
         [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
         [ValidateSet("scp", "sftp")]
         [string]$protocol,
         [Parameter(Position = 1, Mandatory = $true, ValueFromPipeline = $true)]
         [string]$usernameAndHost,
-        [Parameter(Position = 2, Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Position = 2, Mandatory = $false, ValueFromPipeline = $true)]
         [string]$privateKey,
-        [Parameter(Position = 3, Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Position = 3, Mandatory = $false, ValueFromPipeline = $true)]
         [string]$publicKey,
-        [Parameter(Position = 4, Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Position = 4, Mandatory = $false, ValueFromPipeline = $true)]
         [string]$filename,
+        [Parameter(Position = 4, Mandatory = $false, ValueFromPipeline = $true)]
+        [string[]]$filenames = @(),
         [Parameter(Position = 5, Mandatory = $true, ValueFromPipeline = $true)]
-        [string]$remoteFilename
+        [string]$destination,
+        [Parameter(Position = 6, Mandatory = $false, ValueFromPipeline = $true)]
+        [string]$curlOptions = ""
     )
 
-    $curlExe = MyGet-CurlExe-Path
+    # Default *UNIX values
 
-    # scp://username@scp.example.org:/home/peters/myfilename.exe
-    $connectionString = $protocol
-    $connectionString += "://"
-    $connectionString += $usernameAndHost
-    $connectionString += ":"
-    $connectionString += $remoteFilename
+    if($privateKey -eq "") {
+        $privateKey = "id_rsa"
+    }
 
-   . $curlExe --insecure --progress-bar --upload-file $filename `
-    --key $privateKey --pubkey $publicKey $connectionString
+    if($publicKey -eq "") {
+        $publicKey = "id_rsa.pub"
+    }
+    
+    # Default to C:\Users\USERNAME\.ssh
+    
+    if(-not (Test-Path $privateKey) -and (-not [System.IO.Path]::IsPathRooted($privateKey))) {
+       $privateKey = Join-Path $env:HOMEDRIVE $env:HOMEPATH\.ssh\$privateKey
+    }
+
+    if(-not (Test-Path $publicKey) -and (-not [System.IO.Path]::IsPathRooted($publicKey))) {
+       $publicKey = Join-Path $env:HOMEDRIVE $env:HOMEPATH\.ssh\$publicKey
+    }
+
+    # Verify that keys exist
+
+    if(-not (Test-Path $privateKey)) {
+        MyGet-Die "Curl: File does not exist: $privateKey"
+    }
+
+    if(-not (Test-Path $publicKey)) {
+        MyGet-Die "Curl: File does not exist: $publicKey"
+    }
+
+    # Single file upload
+    if($filenames.Length -eq 0) {
+        if($filename -eq "") {
+            MyGet-Die "Curl: Invalid filename (empty string)"
+        }
+        $filenames += $filename
+    }
+
+    if($filenames.Length -eq 0) {
+        MyGet-Die "Curl: Please specify a file to upload"
+    }
+
+    # Estimate upload size
+    $estimatedSize = 0
+    $filenames | ForEach-Object {        
+        $position = [array]::IndexOf($filenames, $_)
+        if($_ -eq "") {
+            MyGet-Die ("Curl: Invalid filename (empty string at position {0})" -f ($position))
+        }
+        if(-not (Test-Path -Path $_ -PathType Leaf)) {
+            MyGet-Die ("Curl: File does note exist: {0} (position {1})" -f ($_, $position))
+        }
+        $estimatedSize += (Get-Item $_).Length
+    }
+
+    switch($estimatedSize) {
+        { $_ -gt 1tb } 
+                { $estimatedSize = "{0:n2} TB" -f ($_ / 1tb) }
+        { $_ -gt 1gb } 
+                { $estimatedSize = "{0:n2} GB" -f ($_ / 1gb) }
+        { $_ -gt 1mb } 
+                { $estimatedSize = "{0:n2} MB" -f ($_ / 1mb) }
+        { $_ -gt 1kb } 
+                { $estimatedSize = "{0:n2} KB" -f ($_ / 1Kb) }
+        default  
+                { $estimatedSize = "{0} B" -f $_ } 
+    }      
+
+    $plural = if($filenames.Length -gt 1) { "s" } else { "" } 
+    MyGet-Write-Diagnostic("Curl: Uploading {0} file{1} ({2})" -f ($filenames.Length, $plural, $estimatedSize))
+
+    # Remote destination
+    $remoteDestination = $protocol
+    $remoteDestination += "://"
+    $remoteDestination += $usernameAndHost
+    $remoteDestination += ":"
+    $remoteDestination += $destination
+
+    $filenames | ForEach-Object {
+        $filename = $_
+        $filenameRemote = Split-Path -Leaf $filename
+
+        Write-Output ""
+        Write-Output $filename
+        Write-Output ""
+
+        . (MyGet-CurlExe-Path) $curlOptions --insecure --upload-file $filename `
+            --key $privateKey --pubkey $publicKey $remoteDestination/$filenameRemote
+
+        if($LASTEXITCODE -ne 0) {
+            MyGet-Die("Curl: Upload failed {0}" -f (Split-Path -Leaf $filename))
+        }
+
+    }
 
 }
 
