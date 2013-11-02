@@ -1,8 +1,13 @@
 # MIT LICENSE
 
-# You can always find an updated version @ https://raw.github.com/peters/myget/master/myget.include.ps1
-
 # Thanks to https://github.com/Squirrel/Squirrel.Windows 
+
+# You can update myget.include.ps1 by running the following command:
+# .\myget.include.ps1 -updateSelf 1
+
+param(
+    [bool] $updateSelf = $false
+)
 
 # Prerequisites (You should add .buildtools to your .(git|hg)ignore)
 $buildRunnerToolsFolder = Split-Path $MyInvocation.MyCommand.Path
@@ -1550,6 +1555,8 @@ function MyGet-Curl-Upload-File {
 
 }
 
+## Self updating
+
 if(-not (Test-Path $buildRunnerToolsFolder)) {
 
     MyGet-Write-Diagnostic "Downloading prerequisites"
@@ -1557,5 +1564,28 @@ if(-not (Test-Path $buildRunnerToolsFolder)) {
 	git clone --depth=1 https://github.com/myget/BuildTools.git $buildRunnerToolsFolder
 
     $(Get-Item $buildRunnerToolsFolder).Attributes = "Hidden"
+
+    if($updateSelf -eq $false) {
+        Remove-Variable -Name buildRunnerToolsFolder
+    }
+
+}
+
+if($updateSelf -eq $true) {
+
+    MyGet-Write-Diagnostic "Updating build tools"
+
+    $rootFolder = Split-Path $MyInvocation.MyCommand.Path
+
+    Set-Location $buildRunnerToolsFolder
+    git pull origin master
+    Set-Location $rootFolder
+
+    MyGet-Write-Diagnostic "Updating myget.include"
+
+    Invoke-WebRequest "https://raw.github.com/peters/myget/master/myget.include.ps1" -OutFile $rootFolder\myget.include.ps1 -Verbose
+    
+    Remove-Variable -Name rootFolder
+    Remove-Variable -Name buildRunnerToolsFolder
 
 }

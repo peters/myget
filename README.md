@@ -23,6 +23,12 @@ You might want to add `.buildtools` to your .gitignore.
 .\examples\build.all.samples.ps1
 ```
 
+# Update `myget.include.ps1`
+
+```
+.\myget.include.ps1 -updateSelf 1
+```
+
 # Available functions
 The ```myget.include.ps1``` script can be included by your ```build.ps1``` script to make use of the following functions:
 
