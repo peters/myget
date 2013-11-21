@@ -1567,10 +1567,6 @@ if(-not (Test-Path $buildRunnerToolsFolder)) {
 
     $(Get-Item $buildRunnerToolsFolder).Attributes = "Hidden"
 
-    if($updateSelf -eq $false) {
-        Remove-Variable -Name buildRunnerToolsFolder
-    }
-
 }
 
 if($updateSelf -eq $true) {
@@ -1588,6 +1584,4 @@ if($updateSelf -eq $true) {
     Invoke-WebRequest "https://raw.github.com/peters/myget/master/myget.include.ps1" -OutFile $rootFolder\myget.include.ps1 -Verbose
     
     Remove-Variable -Name rootFolder
-    Remove-Variable -Name buildRunnerToolsFolder
-
 }
