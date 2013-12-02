@@ -20,6 +20,51 @@ $buildRunnerToolsFolder = Join-Path $buildRunnerToolsFolder ".buildtools"
 
 # Miscellaneous
 
+function MyGet-AssemblyVersion-Set {
+    param(
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$projectFolder,
+        [parameter(Position = 1, Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidatePattern("^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$")]
+        [string]$version
+    )
+
+    function Write-VersionAssemblyInfo {
+        Param(
+            [string]
+            $version, 
+
+            [string]
+            $assemblyInfo
+        )
+
+        $numberOfReplacements = 0
+        $newContent = Get-Content $assemblyInfo | %{
+            $regex = "(Assembly(?:File|Informational)?Version)\(`"\d+\.\d+\.\d+`"\)"
+            $newString = $_
+            if ($_ -match $regex) {
+                $numberOfReplacements++
+                $newString = $_ -replace $regex, "`$1(`"$version`")"
+            }
+            $newString
+        }
+
+        if ($numberOfReplacements -ne 3) {
+            MyGet-Die "Expected to replace the version number in 3 places in AssemblyInfo.cs (AssemblyVersion, AssemblyFileVersion, AssemblyInformationalVersion) but actually replaced it in $numberOfReplacements"
+        }
+
+        $newContent | Set-Content $assemblyInfo -Encoding UTF8
+    }
+
+    $assemblyInfo = Get-ChildItem -Path $projectFolder -Filter "AssemblyInfo.cs" -Recurse
+    $assemblyInfO = $assemblyInfo[0].FullName
+
+    MyGet-Write-Diagnostic "New assembly version: $version"
+
+    Write-VersionAssemblyInfo -assemblyInfo $assemblyInfo -version $version
+
+}
+
 function MyGet-AssemblyInfo {
   # https://github.com/peters/assemblyinfo/blob/develop/getassemblyinfo.ps1
 
@@ -1567,6 +1612,10 @@ if(-not (Test-Path $buildRunnerToolsFolder)) {
 
     $(Get-Item $buildRunnerToolsFolder).Attributes = "Hidden"
 
+    if($updateSelf -eq $false) {
+        Remove-Variable -Name buildRunnerToolsFolder
+    }
+
 }
 
 if($updateSelf -eq $true) {
@@ -1584,4 +1633,6 @@ if($updateSelf -eq $true) {
     Invoke-WebRequest "https://raw.github.com/peters/myget/master/myget.include.ps1" -OutFile $rootFolder\myget.include.ps1 -Verbose
     
     Remove-Variable -Name rootFolder
+    Remove-Variable -Name buildRunnerToolsFolder
+
 }
