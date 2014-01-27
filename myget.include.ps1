@@ -56,6 +56,7 @@ function MyGet-AssemblyVersion-Set {
         $newContent | Set-Content $assemblyInfo -Encoding UTF8
     }
 
+    $projectFolder = Split-Path -parent $projectFolder
     $assemblyInfo = Get-ChildItem -Path $projectFolder -Filter "AssemblyInfo.cs" -Recurse
     $assemblyInfO = $assemblyInfo[0].FullName
 
