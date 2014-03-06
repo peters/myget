@@ -853,6 +853,7 @@ function MyGet-Normalize-Paths {
         $i++;
     }
 
+	return $paths 
 }
 
 function MyGet-TargetFramework-To-Clr {
