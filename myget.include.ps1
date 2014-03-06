@@ -1106,7 +1106,9 @@ function MyGet-Build-Project {
         [string]$verbosity = "Minimal",
 
         [parameter(Position = 10, ValueFromPipeline = $true)]
-        [string]$MSBuildCustomProperties = $null
+        [string]$MSBuildCustomProperties = $null,
+
+        [bool] $MSBuildx64 = $false
     )
 
     $projectOutputPath = Join-Path $outputFolder "$version\$platform\$config"
@@ -1156,8 +1158,14 @@ function MyGet-Build-Project {
             $msbuildPlatform = "Any CPU"
         }
 
+        # Force x64 edition of msbuild
+        $MSBuildx64Framework = ""
+        if($MSBuildx64) {
+            $MSBuildx64Framework = "64"
+        }
+
         # http://msdn.microsoft.com/en-us/library/vstudio/ms164311.aspx
-        & "$(Get-Content env:windir)\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe" `
+        & "$(Get-Content env:windir)\Microsoft.NET\Framework$MSBuildx64Framework\v4.0.30319\MSBuild.exe" `
             $projectPath `
             /target:$target `
             /property:Configuration=$config `
