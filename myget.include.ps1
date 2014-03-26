@@ -20,6 +20,52 @@ $buildRunnerToolsFolder = Join-Path $buildRunnerToolsFolder ".buildtools"
 
 # Miscellaneous
 
+function MyGet-HipChatRoomMessage {
+    # copyright: https://github.com/lholman/hipchat-ps
+
+	param(
+        [parameter(Position = 0, Mandatory = $True)] 
+        [string]$apitoken,
+	    [parameter(Position = 1, Mandatory = $True)]
+	    [string]$roomid,
+	    [parameter(Position = 2, Mandatory = $False)]
+	    [string]$from = $env:COMPUTERNAME,
+	    [parameter(Position = 3, Mandatory = $True)]
+	    [string]$message,	
+        [parameter(Position = 4, Mandatory = $False)]
+	    [string]$colour = "yellow",
+	    [parameter(Position = 5, Mandatory = $False)]
+	    [string]$notify = "1",
+	    [parameter(Position = 6, Mandatory = $False)]
+	    [string]$apihost = "api.hipchat.com"
+	)
+
+	#Replace naked URL's with hyperlinks
+	$regex = [regex] "((www\.|(http|https|ftp|news|file)+\:\/\/)[&#95;.a-z0-9-]+\.[a-z0-9\/&#95;:@=.+?,##%&~-]*[^.|\'|\# |!|\(|?|,| |>|<|;|\)])"
+	$message = $regex.Replace($message, "<a href=`"`$1`">`$1</a>").Replace("href=`"www", "href=`"http://www")
+					
+	#Do the HTTP POST to HipChat
+	$post = "auth_token=$apitoken&room_id=$roomid&from=$from&color=$colour&message=$message&notify=$notify"
+	Write-Debug "post = $post"
+	Write-Debug "https://$apihost/v1/rooms/message"
+	$webRequest = [System.Net.WebRequest]::Create("https://$apihost/v1/rooms/message")
+	$webRequest.ContentType = "application/x-www-form-urlencoded"
+	$postStr = [System.Text.Encoding]::UTF8.GetBytes($post)
+	$webrequest.ContentLength = $postStr.Length
+	$webRequest.Method = "POST"
+	$requestStream = $webRequest.GetRequestStream()
+	$requestStream.Write($postStr, 0,$postStr.length)
+	$requestStream.Close()
+					
+	[System.Net.WebResponse] $resp = $webRequest.GetResponse();
+	$rs = $resp.GetResponseStream();
+	[System.IO.StreamReader] $sr = New-Object System.IO.StreamReader -argumentList $rs;
+	$result = $sr.ReadToEnd();				
+        
+    return $result | Format-Table
+
+}
+
 function MyGet-AssemblyVersion-Set {
     param(
         [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
