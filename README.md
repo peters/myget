@@ -55,7 +55,7 @@ The ```myget.include.ps1``` script can be included by your ```build.ps1``` scrip
 * ```MyGet-AssemblyInfo``` Read miscellaneous information from a binary (e.g TargetFramework, Processor architecture ++)
 * ```MyGet-AssemblyInfo-Set``` Set AssemblyInfo.cs version (Assembly, AssemblyFileVersion, AssemblyInformationalVersion)
 * ```MyGet-AssemblyInfo-Set``` Set AssemblyInfo.cs version (Assembly, AssemblyFileVersion, AssemblyInformationalVersion)
-# ```MyGet-HipChatRoomMessage``` Send messages to a hipchat room.
+* ```MyGet-HipChatRoomMessage``` Send messages to a hipchat room.
 
 ## Nuget utility functions
 * ```MyGet-NugetExe-Path``` - path to NuGet 
