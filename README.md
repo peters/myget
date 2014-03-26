@@ -54,7 +54,6 @@ The ```myget.include.ps1``` script can be included by your ```build.ps1``` scrip
 * ```MyGet-TargetFramework-To-Clr``` Clr to target framework version (e.g net20 -> v2.0)
 * ```MyGet-AssemblyInfo``` Read miscellaneous information from a binary (e.g TargetFramework, Processor architecture ++)
 * ```MyGet-AssemblyInfo-Set``` Set AssemblyInfo.cs version (Assembly, AssemblyFileVersion, AssemblyInformationalVersion)
-* ```MyGet-AssemblyInfo-Set``` Set AssemblyInfo.cs version (Assembly, AssemblyFileVersion, AssemblyInformationalVersion)
 * ```MyGet-HipChatRoomMessage``` Send messages to a hipchat room.
 
 ## Nuget utility functions
