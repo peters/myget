@@ -1519,7 +1519,9 @@ function MyGet-Squirrel-New-Release {
         [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
         [string]$solutionFolder,
         [Parameter(Position = 1, Mandatory = $true, ValueFromPipeline = $true)]
-        [string]$buildFolder
+        [string]$buildFolder,
+        [Parameter(Position = 2, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$releasesFolder
     )
 
     $packagesDir = Join-Path $solutionFolder "packages"
@@ -1537,7 +1539,7 @@ function MyGet-Squirrel-New-Release {
 
     Import-Module $commandsPsm1.FullName
 
-    New-ReleaseForPackage -SolutionDir $solutionFolder -BuildDir $buildFolder
+    New-ReleaseForPackage -SolutionDir $solutionFolder -BuildDir $buildFolder -ReleasesDir $releasesFolder
 
 }
 
