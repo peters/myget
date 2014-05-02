@@ -825,7 +825,7 @@ function MyGet-CurlExe-Path {
 
 function MyGet-NugetExe-Path {
     param(
-        [ValidateSet("2.5", "2.6", "2.7", "latest")]
+        [ValidateSet("2.5", "2.6", "2.7", "2.8.0", "2.8.1", "latest")]
         [string] $version = "latest"
     )
 
