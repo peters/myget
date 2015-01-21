@@ -1156,6 +1156,8 @@ function MyGet-Build-Project {
 		
 		[parameter(Position = 11, ValueFromPipeline = $true)]
 		[string]$MSBuildPath = "$(Get-Content env:windir)\Microsoft.NET\Framework$MSBuildx64Framework\v4.0.30319\MSBuild.exe",
+		
+		[parameter(Position = 12, ValueFromPipeline = $true)]
         [bool] $MSBuildx64 = $false
     )
 
