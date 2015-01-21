@@ -1153,7 +1153,9 @@ function MyGet-Build-Project {
 
         [parameter(Position = 10, ValueFromPipeline = $true)]
         [string]$MSBuildCustomProperties = $null,
-
+		
+		[parameter(Position = 11, ValueFromPipeline = $true)]
+		[string]$MSBuildPath = "$(Get-Content env:windir)\Microsoft.NET\Framework$MSBuildx64Framework\v4.0.30319\MSBuild.exe",
         [bool] $MSBuildx64 = $false
     )
 
@@ -1211,7 +1213,7 @@ function MyGet-Build-Project {
         }
 
         # http://msdn.microsoft.com/en-us/library/vstudio/ms164311.aspx
-        & "$(Get-Content env:windir)\Microsoft.NET\Framework$MSBuildx64Framework\v4.0.30319\MSBuild.exe" `
+        & $MSBuildPath `
             $projectPath `
             /target:$target `
             /property:Configuration=$config `
