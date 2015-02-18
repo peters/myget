@@ -104,7 +104,7 @@ function MyGet-AssemblyVersion-Set {
 
     $projectFolder = Split-Path -parent $projectFolder
     $assemblyInfo = Get-ChildItem -Path $projectFolder -Filter "AssemblyInfo.cs" -Recurse
-    $assemblyInfO = $assemblyInfo[0].FullName
+    $assemblyInfo = $assemblyInfo[0].FullName
 
     MyGet-Write-Diagnostic "New assembly version: $version"
 
