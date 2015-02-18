@@ -1153,11 +1153,10 @@ function MyGet-Build-Project {
 
         [parameter(Position = 10, ValueFromPipeline = $true)]
         [string]$MSBuildCustomProperties = $null,
-		
-		[parameter(Position = 11, ValueFromPipeline = $true)]
+
+        [parameter(Position = 11, ValueFromPipeline = $true)]
 		[string]$MSBuildPath = "$(Get-Content env:windir)\Microsoft.NET\Framework$MSBuildx64Framework\v4.0.30319\MSBuild.exe",
-		
-		[parameter(Position = 12, ValueFromPipeline = $true)]
+
         [bool] $MSBuildx64 = $false
     )
 
@@ -1279,7 +1278,11 @@ function MyGet-Build-Solution {
         [string]$nuspec = $null,
 
         [parameter(Position = 12, ValueFromPipeline = $true)]
-        [string]$MSBuildCustomProperties = $null
+        [string]$MSBuildCustomProperties = $null,
+		
+		[parameter(Position = 13, ValueFromPipeline = $true)]
+		[string]$MSBuildPath = "$(Get-Content env:windir)\Microsoft.NET\Framework$MSBuildx64Framework\v4.0.30319\MSBuild.exe"
+
     )
 
     if(-not (Test-Path $sln)) {
@@ -1309,7 +1312,8 @@ function MyGet-Build-Solution {
             MyGet-Build-Project -rootFolder $rootFolder -project $project -outputFolder $outputFolder `
                 -target $target -config $config -targetFrameworks $targetFrameworks `
                 -version $version -platform $platform -verbosity $verbosity `
-                -MSBuildCustomProperties $MSBuildCustomProperties
+                -MSBuildCustomProperties $MSBuildCustomProperties `
+				-MSBuildPath $MSBuildPath
     
             if(-not ($excludeNupkgProjects -contains $project)) {
                 MyGet-Build-Nupkg -rootFolder $rootFolder -project $project -nuspec $nuspec -outputFolder $finalBuildOutputFolder `
