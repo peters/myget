@@ -87,24 +87,25 @@ function MyGet-AssemblyVersion-Set {
 		$nugetVersion = $version
 		$version = $version -match "\d+\.\d+\.\d+"
 		$version = $matches[0]
-		$regex = "(Assembly(?:File|Informational)?Version)\(`"\d+\.\d+\.\d+`"\)"
 
 		$numberOfReplacements = 0
 		$newContent = [System.IO.File]::ReadLines($assemblyInfo) | ForEach-Object {
 			$line = $_
 			
-			if($line -match $regex) {
-				$numberOfReplacements++;
-				if($line.Contains("AssemblyInformationalVersion")) {
-					$line = $_ -replace $regex, "`$1(`"$nugetVersion`")"
-				} else {
-					$line = $_ -replace $regex, "`$1(`"$version`")"
-				}
-			} 
+			if($line.StartsWith("[assembly: AssemblyInformationalVersion")) {
+				$line = "[assembly: AssemblyInformationalVersion(""$nugetVersion"")]"
+				$numberOfReplacements++
+			} elseif($line.StartsWith("[assembly: AssemblyFileVersion")) {
+				$line = "[assembly: AssemblyFileVersion(""$version"")]"
+				$numberOfReplacements++
+			} elseif($line.StartsWith("[assembly: AssemblyVersion")) {
+				$line = "[assembly: AssemblyVersion(""$version"")]"
+				$numberOfReplacements++
+			}
 			
-			$line
-		}
-		
+			$line		
+		} 
+
         if ($numberOfReplacements -ne 3) {
             MyGet-Die "Expected to replace the version number in 3 places in AssemblyInfo.cs (AssemblyVersion, AssemblyFileVersion, AssemblyInformationalVersion) but actually replaced it in $numberOfReplacements"
         }
