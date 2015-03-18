@@ -69,7 +69,7 @@ function MyGet-HipChatRoomMessage {
 function MyGet-AssemblyVersion-Set {
     param(
         [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
-        [string]$projectFolder,
+        [string]$assemblyInfo,
         [parameter(Position = 1, Mandatory = $true, ValueFromPipeline = $true)]
         [ValidatePattern("^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$")]
         [string]$version
@@ -112,10 +112,6 @@ function MyGet-AssemblyVersion-Set {
 
         $newContent | Set-Content $assemblyInfo -Encoding UTF8
     }
-
-    $projectFolder = Split-Path -parent $projectFolder
-    $assemblyInfo = Get-ChildItem -Path $projectFolder -Filter "AssemblyInfo.cs" -Recurse
-    $assemblyInfo = $assemblyInfo[0].FullName
 
     MyGet-Write-Diagnostic "New assembly version: $version"
 
