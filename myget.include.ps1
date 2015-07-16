@@ -69,7 +69,7 @@ function MyGet-HipChatRoomMessage {
 function MyGet-AssemblyVersion-Set {
     param(
         [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
-        [string]$assemblyInfo,
+        [string]$projectFolder,
         [parameter(Position = 1, Mandatory = $true, ValueFromPipeline = $true)]
         [ValidatePattern("^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$")]
         [string]$version
@@ -84,27 +84,16 @@ function MyGet-AssemblyVersion-Set {
             $assemblyInfo
         )
 
-		$nugetVersion = $version
-		$version = $version -match "\d+\.\d+\.\d+"
-		$version = $matches[0]
-
-		$numberOfReplacements = 0
-		$newContent = [System.IO.File]::ReadLines($assemblyInfo) | ForEach-Object {
-			$line = $_
-			
-			if($line.StartsWith("[assembly: AssemblyInformationalVersion")) {
-				$line = "[assembly: AssemblyInformationalVersion(""$nugetVersion"")]"
-				$numberOfReplacements++
-			} elseif($line.StartsWith("[assembly: AssemblyFileVersion")) {
-				$line = "[assembly: AssemblyFileVersion(""$version"")]"
-				$numberOfReplacements++
-			} elseif($line.StartsWith("[assembly: AssemblyVersion")) {
-				$line = "[assembly: AssemblyVersion(""$version"")]"
-				$numberOfReplacements++
-			}
-			
-			$line		
-		} 
+        $numberOfReplacements = 0
+        $newContent = Get-Content $assemblyInfo | %{
+            $regex = "(Assembly(?:File|Informational)?Version)\(`"\d+\.\d+\.\d+`"\)"
+            $newString = $_
+            if ($_ -match $regex) {
+                $numberOfReplacements++
+                $newString = $_ -replace $regex, "`$1(`"$version`")"
+            }
+            $newString
+        }
 
         if ($numberOfReplacements -ne 3) {
             MyGet-Die "Expected to replace the version number in 3 places in AssemblyInfo.cs (AssemblyVersion, AssemblyFileVersion, AssemblyInformationalVersion) but actually replaced it in $numberOfReplacements"
@@ -112,6 +101,10 @@ function MyGet-AssemblyVersion-Set {
 
         $newContent | Set-Content $assemblyInfo -Encoding UTF8
     }
+
+    $projectFolder = Split-Path -parent $projectFolder
+    $assemblyInfo = Get-ChildItem -Path $projectFolder -Filter "AssemblyInfo.cs" -Recurse
+    $assemblyInfo = $assemblyInfo[0].FullName
 
     MyGet-Write-Diagnostic "New assembly version: $version"
 
