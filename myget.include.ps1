@@ -987,11 +987,14 @@ function MyGet-Build-Clean {
     )
 
     MyGet-Write-Diagnostic "Build: Clean"
+    
+    $deleteFolders = $folders -split ","
 
-    Get-ChildItem $rootFolder -Include $folders -Recurse | ForEach-Object {
-       Remove-Item $_.fullname -Force -Recurse 
+    Foreach($deletePath in $deleteFolders) {
+        if (Test-Path "$rootFolder/$deletePath"){
+            Remove-Item -Recurse -Force "$rootFolder/$deletePath"
+        }
     }
-
 }
 
 function MyGet-Build-Bootstrap {
