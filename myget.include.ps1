@@ -83,14 +83,28 @@ function MyGet-AssemblyVersion-Set {
             [string]
             $assemblyInfo
         )
+		
+		$nugetVersion = $version
+		$version = $version -match "\d+\.\d+\.\d+"
+		$version = $matches[0]
 
         $numberOfReplacements = 0
         $newContent = Get-Content $assemblyInfo | %{
-            $regex = "(Assembly(?:File|Informational)?Version)\(`"\d+\.\d+\.\d+`"\)"
+            $regex = "(Assembly(?:File)?Version)\(`"\d+\.\d+\.\d+`"\)"
             $newString = $_
             if ($_ -match $regex) {
                 $numberOfReplacements++
                 $newString = $_ -replace $regex, "`$1(`"$version`")"
+            }
+            $newString
+        }
+				
+	    $newContent = Get-Content $assemblyInfo | %{
+            $regex = "(AssemblyInformationalVersion)\(`".*`"\)"
+            $newString = $_
+            if ($_ -match $regex) {
+                $numberOfReplacements++
+                $newString = $_ -replace $regex, "`$1(`"$nugetVersion`")"
             }
             $newString
         }
