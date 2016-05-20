@@ -97,9 +97,9 @@ function MyGet-AssemblyVersion-Set {
                 $newString = $_ -replace $regex, "`$1(`"$version`")"
             }
             $newString
-        }
-				
-	    $newContent = Get-Content $assemblyInfo | %{
+        }		
+			
+	    $newContent = $newContent | %{
             $regex = "(AssemblyInformationalVersion)\(`".*`"\)"
             $newString = $_
             if ($_ -match $regex) {
@@ -112,7 +112,7 @@ function MyGet-AssemblyVersion-Set {
         if ($numberOfReplacements -ne 3) {
             MyGet-Die "Expected to replace the version number in 3 places in AssemblyInfo.cs (AssemblyVersion, AssemblyFileVersion, AssemblyInformationalVersion) but actually replaced it in $numberOfReplacements"
         }
-
+		
         $newContent | Set-Content $assemblyInfo -Encoding UTF8
     }
 
