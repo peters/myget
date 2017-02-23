@@ -845,7 +845,7 @@ function MyGet-NugetExe-Path {
         [string] $config = $env:NUGET_CONFIG_FILENAME
 	)
 	
-	if((-not [string]::IsNullOrEmpty($config)) -and (-not (Test-Path $config))) {
+	if(-not ([string]::IsNullOrEmpty($config) -and (-not (Test-Path $config)))) {
 		Myget-Die "Nuget config does not exist: $config"
 	} else {
 		MyGet-Write-Diagnostic "Using nuget configuration file: $config"		
