@@ -845,21 +845,30 @@ function MyGet-NugetExe-Path {
         [string] $config = $env:NUGET_CONFIG_FILENAME
 	)
 	
-	if(-not ([string]::IsNullOrEmpty($config) -and (-not (Test-Path $config)))) {
+    $useNugetConfig = $true
+    if([string]::IsNullOrWhiteSpace($config)) {
+        $useNugetConfig = $false
+    }
+
+	if($useNugetConfig -and (-not (Test-Path $config))) {
 		Myget-Die "Nuget config does not exist: $config"
-	} else {
+	} elseif($useNugetConfig) {
 		MyGet-Write-Diagnostic "Using nuget configuration file: $config"		
 	}
-	
+
     # Test environment variable
     if(Test-Path env:nuget) {
-		. $env:nuget config -ConfigFile $config
+        if($useNugetConfig) {
+    		. $env:nuget config -ConfigFile $config
+        }
         return $env:nuget  
     }
 
     $nuget = Join-Path $buildRunnerToolsFolder "tools\nuget\$version\nuget.exe"
     if (Test-Path $nuget) {
-		. $nuget config -ConfigFile $config
+        if($useNugetConfig) {
+    		. $nuget config -ConfigFile $config
+        }
         return $nuget
     }
 
