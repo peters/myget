@@ -840,16 +840,28 @@ function MyGet-CurlExe-Path {
 function MyGet-NugetExe-Path {
     param(
         [ValidateSet("2.5", "2.6", "2.7", "2.8.0", "2.8.1", "latest")]
-        [string] $version = "latest"
-    )
+        [string] $version = "latest",		
+        [parameter(Position = 1, ValueFromPipeline = $true)]
+        [string] $config = $env:NUGET_CONFIG_FILENAME
+	)
+	
+	if(-not [string]::IsNullOrEmpty($config) -and (-not Test-Path($config))) {
+		Myget-Die "Nuget config does not exist: $config"
+	}
 
     # Test environment variable
-    if((MyGet-BuildRunner -eq "myget") -and (Test-Path env:nuget)) {
-        return $env:nuget
+    if(Test-Path env:nuget) {
+	    if($config) {
+			return $env:nuget -config $config
+		}
+        return $env:nuget 
     }
 
     $nuget = Join-Path $buildRunnerToolsFolder "tools\nuget\$version\nuget.exe"
     if (Test-Path $nuget) {
+		if($config) {
+			return $nuget -config $config
+		}
         return $nuget
     }
 
@@ -1026,13 +1038,15 @@ function MyGet-Build-Clean {
 function MyGet-Build-Bootstrap {
     param(
         [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
-        [string]$project
-    )
+        [string]$project,
+        [parameter(Position = 1, ValueFromPipeline = $true)]
+        [string]$nugetConfigFilename = $env:NUGET_CONFIG_FILENAME
+	)
 
     MyGet-Write-Diagnostic "Build: Bootstrap"
 
     $solutionFolder = [System.IO.Path]::GetDirectoryName($project)
-    $nugetExe = MyGet-NugetExe-Path
+    $nugetExe = MyGet-NugetExe-Path -Config $nugetConfigFilename
 
     . $nugetExe config -Set Verbosity=quiet
 
@@ -1081,6 +1095,9 @@ function MyGet-Build-Nupkg {
 
         [parameter(Position = 9, ValueFromPipeline = $true)]
         [string]$nugetIncludeSymbols = $true
+		
+        [parameter(Position = 10, ValueFromPipeline = $true)]
+        [string]$nugetConfigFilename = $env:NUGET_CONFIG_FILENAME
 
     )
     
@@ -1104,7 +1121,7 @@ function MyGet-Build-Nupkg {
 
     # Nuget
     $nugetCurrentFolder = [System.IO.Path]::GetDirectoryName($nuspec)
-    $nugetExe = MyGet-NugetExe-Path
+    $nugetExe = MyGet-NugetExe-Path -Config $nugetConfigFilename
     $nugetProperties = @(
         "Configuration=$config",
         "Platform=$platform",
