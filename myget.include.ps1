@@ -980,7 +980,7 @@ function MyGet-TargetFramework-To-Clr {
 function MyGet-Clr-To-TargetFramework {
     param(
         [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
-        [ValidateSet("net20", "net35", "net40", "net45", "net451", "net46", "net461","net462")]
+        [ValidateSet("net20", "net35", "net40", "net45", "net451", "net452", "net46", "net461","net462")]
         [string]$clr
     )
 
