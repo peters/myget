@@ -938,7 +938,7 @@ function MyGet-Normalize-Paths {
 function MyGet-TargetFramework-To-Clr {
     param(
         [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
-        [ValidateSet("v2.0", "v3.5", "v4.0", "v4.5", "v4.5.1", "v4.5.2", "v4.6", "v4.6.1", "v4.6.2")]
+        [ValidateSet("v2.0", "v3.5", "v4.0", "v4.5", "v4.5.1", "v4.5.2", "v4.6", "v4.6.1", "v4.6.2", "v4.7.0")]
         [string]$targetFramework
     )
 
@@ -971,6 +971,9 @@ function MyGet-TargetFramework-To-Clr {
 		}
 		"v4.6.2" {
 		    $clr = "net462"
+		}
+		"v4.7.0" {
+		    $clr = "net470"
 		}
     }
 
@@ -1013,6 +1016,9 @@ function MyGet-Clr-To-TargetFramework {
 		}
 		"net462" {
 			$targetFramework = "v4.6.2"
+		}
+		"net470" {
+			$targetFramework = "v4.7.0"
 		}
     }
 
@@ -1201,11 +1207,11 @@ function MyGet-Build-Project {
         [string]$version,
         
         [parameter(Position = 6, Mandatory = $false, ValueFromPipeline = $true)]
-        [ValidateSet("v1.1", "v2.0", "v3.5", "v4.0", "v4.5", "v4.5.1", "v4.5.2", "v4.6", "v4.6.1", "v4.6.2")]
+        [ValidateSet("v1.1", "v2.0", "v3.5", "v4.0", "v4.5", "v4.5.1", "v4.5.2", "v4.6", "v4.6.1", "v4.6.2", "v4.7.0")]
         [string[]]$targetFrameworks = @(),
 
         [parameter(Position = 7, Mandatory = $false, ValueFromPipeline = $true)]
-        [ValidateSet("v1.1", "v2.0", "v3.5", "v4.0", "v4.5", "v4.5.1", "v4.5.2", "v4.6", "v4.6.1", "v4.6.2")]
+        [ValidateSet("v1.1", "v2.0", "v3.5", "v4.0", "v4.5", "v4.5.1", "v4.5.2", "v4.6", "v4.6.1", "v4.6.2", "v4.7.0")]
         [string]$targetFramework = $null,
 
         [parameter(Position = 8, Mandatory = $true, ValueFromPipeline = $true)]
