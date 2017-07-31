@@ -973,7 +973,7 @@ function MyGet-TargetFramework-To-Clr {
 		    $clr = "net462"
 		}
 		"v4.7" {
-		    $clr = "net470"
+		    $clr = "net47"
 		}
     }
 
@@ -1017,7 +1017,7 @@ function MyGet-Clr-To-TargetFramework {
 		"net462" {
 			$targetFramework = "v4.6.2"
 		}
-		"net470" {
+		"net47" {
 			$targetFramework = "v4.7"
 		}
     }
