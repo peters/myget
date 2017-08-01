@@ -844,7 +844,7 @@ function MyGet-VSWhereExe-Path {
         return $VSWhereExe
     }
 
-    MyGet-Die "Could not find curl executable: $VSWhereExe"
+    MyGet-Die "Could not find vswhere executable: $VSWhereExe"
 }
 
 function MyGet-NugetExe-Path {
