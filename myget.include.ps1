@@ -837,6 +837,16 @@ function MyGet-CurlExe-Path {
     MyGet-Die "Could not find curl executable: $curl"
 }
 
+function MyGet-VSWhereExe-Path {
+
+    $VSWhereExe = Join-Path $buildRunnerToolsFolder "tools\vswhere\latest\vswhere.exe"
+    if (Test-Path $VSWhereExe) {
+        return $VSWhereExe
+    }
+
+    MyGet-Die "Could not find curl executable: $VSWhereExe"
+}
+
 function MyGet-NugetExe-Path {
     param(
         [ValidateSet("2.5", "2.6", "2.7", "2.8.0", "2.8.1", "latest")]
